@@ -1,9 +1,9 @@
 /*
  * Hides the title element the plugin replaces (FakeTitleElementService).
- * `!important` plus the attribute selector outranks a theme or snippet rule
- * such as `.inline-title { display: flex !important; }` (#280).
+ * The attribute selector makes this rule more specific than a theme's display rule
+ * on the inline title, e.g. AnuPpuccin's `.mk-folder-header .inline-title` (#280).
  */
 body [omn-original-id].omn-hidden,
 body [omn-fake-id].omn-hidden {
-    display: none !important;
+    display: none;
 }

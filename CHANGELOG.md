@@ -31,7 +31,8 @@ Requires Obsidian 1.13 or newer.
 - The API types from Snezhig's `front-matter-plugin-api-provider` are included in
   `src/Components/ApiAdapter/Contracts.ts` (ISC, credited) instead of a git submodule. The README no longer
   points to that provider: it looks for the original plugin's id and cannot find Meaningful Name.
-- `builtin-modules` is replaced by Node's own module list, and the screenshot tool has its own tsconfig.
+- `builtin-modules` is replaced by Node's own module list, the screenshot tool has its own tsconfig, and unit
+  tests get `window` from a small custom Jest environment (`test/environment.ts`).
 
 ## 1.0.1
 

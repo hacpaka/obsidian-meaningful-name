@@ -112,7 +112,7 @@ export default class FakeTitleElementService {
     // attribute. The UA rule `[hidden]{display:none}` has the lowest priority,
     // so any theme/snippet with a `.inline-title{display:…}` rule un-hides the
     // original title and the filename shows alongside our title (#280, #234,
-    // #123). The class rule is `!important` and more specific than such theme
+    // #123). The class rule is more specific than such theme
     // rules, keeping exactly one title visible.
     private hide(el: HTMLElement): void {
         el.addClass("omn-hidden");

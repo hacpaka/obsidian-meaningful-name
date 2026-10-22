@@ -2,7 +2,7 @@ import type { Config } from "jest";
 
 const config: Config = {
     preset: "ts-jest",
-    testEnvironment: "node",
+    testEnvironment: "<rootDir>/test/environment.ts",
     moduleDirectories: ["node_modules", __dirname],
     bail: true,
     setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],

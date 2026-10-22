@@ -38,14 +38,17 @@ describe("Meaningful Name — InlineTitle has no duplicate (#234)", function () 
     // #280 — repro: a theme/snippet that sets `display` on `.inline-title`
     // (very common) un-hides the original title when it is hidden via the
     // `hidden` attribute, because `[hidden]{display:none}` is a low-priority UA
-    // rule. The plugin now hides the original with an important inline style,
-    // which wins the cascade against any author rule — so the filename stays
-    // hidden even under such a theme. With the old code this shows two titles.
+    // rule. The plugin now hides the original with a class rule that is more
+    // specific than such theme rules — so the filename stays hidden even under
+    // such a theme. With the old code this shows two titles. The rules below are
+    // AnuPpuccin's, the theme from the report, including its most specific one.
     it("stays single-titled under a theme that styles .inline-title (#280)", async function () {
         await browser.execute(() => {
             const style = document.createElement("style");
             style.id = "omn-e2e-theme";
-            style.textContent = ".inline-title { display: flex !important; }";
+            style.textContent =
+                ".inline-title { display: var(--anp-inline-title-vis, block); }" +
+                ".markdown-source-view .inline-title, .mk-folder-header .inline-title { display: block; }";
             document.head.appendChild(style);
         });
 
