@@ -41,7 +41,7 @@ Open **Settings → Community plugins → Browse**, search for **Meaningful Name
 
 ### Manual
 
-Download the latest `obsidian-meaningful-name-plugin-*.zip` from the [latest release](https://github.com/Snezhig/obsidian-front-matter-title/releases/latest) and unpack it into your vault under `.obsidian/plugins/`.
+Download `main.js` and `manifest.json` from the [latest release](https://github.com/hacpaka/obsidian-meaningful-name/releases/latest) into your vault under `.obsidian/plugins/meaningful-name/`, then enable the plugin in **Settings → Community plugins**.
 
 ## Quick start
 

@@ -1,6 +1,6 @@
 import { browser, $, expect } from "@wdio/globals";
 
-const PLUGIN_ID = "obsidian-meaningful-name-plugin";
+const PLUGIN_ID = "meaningful-name";
 
 describe("Meaningful Name — smoke on real Obsidian", function () {
     it("boots without crashing and the plugin is loaded", async function () {

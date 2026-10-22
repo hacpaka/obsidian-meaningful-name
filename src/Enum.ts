@@ -40,4 +40,4 @@ export const Managers = [
     Feature.Canvas,
 ];
 
-export const GITHUB_DOCS = "https://github.com/snezhig/obsidian-front-matter-title/blob/master/docs/";
+export const GITHUB_DOCS = "https://github.com/hacpaka/obsidian-meaningful-name/blob/master/docs/";

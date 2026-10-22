@@ -37,7 +37,7 @@ Yes — each place is a separate [feature](./Features.md) you toggle independent
 1. Enable **Debug info** in [Settings → Util](./Settings.md#debug-info).
 2. Open the developer console: **Ctrl/Cmd+Shift+I**.
 3. Reproduce the issue and copy any logged errors.
-4. Open an issue on [GitHub](https://github.com/Snezhig/obsidian-front-matter-title/issues) with the steps and the log.
+4. Open an issue on [GitHub](https://github.com/hacpaka/obsidian-meaningful-name/issues) with the steps and the log.
 
 ### How do I temporarily turn everything off?
 

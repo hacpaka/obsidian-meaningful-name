@@ -1,6 +1,6 @@
 import { browser, expect } from "@wdio/globals";
 
-const RELOAD = "obsidian-meaningful-name-plugin:omn-features-reload";
+const RELOAD = "meaningful-name:omn-features-reload";
 
 // T11 — verify the plugin produces no errors while (re)initialising all features.
 // Reload + view switching exercises the same paths as #247 ("TypeError ...

@@ -143,7 +143,6 @@ const zh_tw: Translation = {
     },
     features: "特性功能",
     util: "工具",
-    coffee: "如果您喜歡此插件並希望幫助/支持作者持續開發，請點擊以下按鈕:",
     debug_info: {
         title: "調試資訊",
         desc: "在終端中顯示調試資訊和捕捉到的錯誤資訊",

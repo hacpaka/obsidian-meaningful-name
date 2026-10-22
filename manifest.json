@@ -1,11 +1,10 @@
 {
-  "id": "obsidian-meaningful-name-plugin",
+  "id": "meaningful-name",
   "name": "Meaningful Name",
-  "version": "4.2.1",
+  "version": "1.0.0",
   "minAppVersion": "1.12.0",
-  "description": "Lets you define a title in frontmatter to be displayed as the filename for explorer, graph, search and etc.",
+  "description": "Shows a readable name from a note's frontmatter in place of its filename: explorer, tabs, graph, search and more.",
   "author": "hacpaka",
   "authorUrl": "https://github.com/hacpaka",
-  "isDesktopOnly": false,
-  "fundingUrl": "https://www.buymeacoffee.com/snezhig"
+  "isDesktopOnly": false
 }

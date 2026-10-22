@@ -4,7 +4,7 @@ import { App, Component, MarkdownRenderer, Modal } from "obsidian";
 // the current version, so the notice is specific to each release.
 declare const PLUGIN_WHATS_NEW: string;
 
-const ISSUES_URL = "https://github.com/snezhig/obsidian-front-matter-title/issues";
+const ISSUES_URL = "https://github.com/hacpaka/obsidian-meaningful-name/issues";
 
 /**
  * Shown once after the plugin is updated to a new version: the changes for that

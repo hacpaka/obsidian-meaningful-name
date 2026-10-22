@@ -1,7 +1,7 @@
 # Manual check — 4.1.0 fixes
 
 This vault has the plugin's features enabled in the seeded settings. Drop the built
-`main.js` + `manifest.json` into `.obsidian/plugins/obsidian-meaningful-name-plugin/`,
+`main.js` + `manifest.json` into `.obsidian/plugins/meaningful-name/`,
 open the vault, then walk the list.
 
 - **#250 — externally created files.** Create a new note (e.g. from another tab or device)

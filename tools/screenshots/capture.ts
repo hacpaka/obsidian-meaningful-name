@@ -20,7 +20,7 @@ import * as path from "path";
  *   ./dnode-e2e.sh npm run shots
  */
 
-const PLUGIN_ID = "obsidian-meaningful-name-plugin";
+const PLUGIN_ID = "meaningful-name";
 const OUT = path.resolve("docs/img");
 const ACTIVATION = 5000; // bind() activation gate, see E2E_TEST_PLAN.md
 

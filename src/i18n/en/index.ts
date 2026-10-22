@@ -155,7 +155,6 @@ const en = {
     },
     features: "Features",
     util: "Util",
-    coffee: "If you like this plugin and you would like to help support continued development, you can use the buttons below:",
     debug_info: {
         title: "Debug info",
         desc: "Show debug info and caught errors in console",

@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   release:
-    if: github.repository == 'snezhig/obsidian-front-matter-title'
+    if: github.repository == 'hacpaka/obsidian-meaningful-name'
     # Pinned to 22.04 to match the e2e system-deps list (run-e2e action); 24.04's
     # t64 package renames break apt-get for the Electron/Obsidian dependencies.
     runs-on: ubuntu-22.04
