@@ -40,7 +40,7 @@ export default class FunctionReplacer<Target, Method extends FunctionPropertyNam
         try {
             return new FunctionReplacer(target, method, args, implementation);
         } catch (e) {
-            console.error(`[front-matter-title] cannot patch "${String(method)}", feature degraded:`, e);
+            console.error(`[meaningful-name] cannot patch "${String(method)}", feature degraded:`, e);
             return null;
         }
     }

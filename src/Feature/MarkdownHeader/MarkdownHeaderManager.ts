@@ -110,7 +110,7 @@ export class MarkdownHeaderManager extends AbstractManager {
 
     private findExistingFakeEl(container: HTMLElement): HTMLDivElement | null {
         for (const i of Array.from(container.children)) {
-            if (i.hasAttribute("data-ofmt") && i.instanceOf(HTMLDivElement)) {
+            if (i.hasAttribute("data-omn") && i.instanceOf(HTMLDivElement)) {
                 return i;
             }
         }
@@ -120,7 +120,7 @@ export class MarkdownHeaderManager extends AbstractManager {
     private createFakeEl(title: string, view: MarkdownViewExt): HTMLDivElement {
         const el = createDiv();
         el.className = "view-header-title";
-        el.dataset["ofmt"] = "true";
+        el.dataset["omn"] = "true";
         el.innerText = title;
         el.hidden = true;
         el.onclick = () => {

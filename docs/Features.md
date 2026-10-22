@@ -1,8 +1,8 @@
 # Features
 
-A **feature** is a single place in Obsidian where the plugin replaces the displayed filename with your frontmatter title. Each one is independent: turn on only the places you care about in **Settings → Front Matter Title → Features**.
+A **feature** is a single place in Obsidian where the plugin replaces the displayed filename with your frontmatter title. Each one is independent: turn on only the places you care about in **Settings → Meaningful Name → Features**.
 
-Every feature uses your title [template](./Templates.md). By default they all share the **Common main template** (`title`), but each feature can use its own template — click **Manage** next to a feature to set one.
+Every feature uses your title [template](./Templates.md). By default they all share the **Common main template** (`name`), but each feature can use its own template — click **Manage** next to a feature to set one.
 
 The features below are grouped by where you'll notice them.
 

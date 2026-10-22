@@ -35,7 +35,7 @@ export default class PluginHelper {
         return {
             version: PLUGIN_VERSION,
             templates: {
-                common: { main: "title", fallback: "fallback_title" },
+                common: { main: "name", fallback: "fallback_title" },
             },
             rules: {
                 paths: {

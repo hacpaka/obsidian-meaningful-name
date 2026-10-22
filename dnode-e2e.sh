@@ -7,7 +7,7 @@
 #        ./dnode-e2e.sh <cmd...>
 set -e
 
-IMAGE=ofmt-e2e
+IMAGE=omn-e2e
 docker build -f Dockerfile.e2e -t "$IMAGE" .
 
 if [ "$#" -eq 0 ]; then

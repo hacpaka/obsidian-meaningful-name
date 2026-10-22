@@ -1,8 +1,8 @@
 import { browser, $, expect } from "@wdio/globals";
 
-const PLUGIN_ID = "obsidian-front-matter-title-plugin";
+const PLUGIN_ID = "obsidian-meaningful-name-plugin";
 
-describe("Front Matter Title — smoke on real Obsidian", function () {
+describe("Meaningful Name — smoke on real Obsidian", function () {
     it("boots without crashing and the plugin is loaded", async function () {
         const loaded = await browser.executeObsidian(({ app }, id) => {
             // @ts-expect-error plugins is part of the internal app API

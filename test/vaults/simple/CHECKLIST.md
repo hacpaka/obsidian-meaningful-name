@@ -1,7 +1,7 @@
 # Manual check — 4.1.0 fixes
 
 This vault has the plugin's features enabled in the seeded settings. Drop the built
-`main.js` + `manifest.json` into `.obsidian/plugins/obsidian-front-matter-title-plugin/`,
+`main.js` + `manifest.json` into `.obsidian/plugins/obsidian-meaningful-name-plugin/`,
 open the vault, then walk the list.
 
 - **#250 — externally created files.** Create a new note (e.g. from another tab or device)
@@ -14,7 +14,7 @@ open the vault, then walk the list.
 - **#248 — tab titles.** Open a few notes in tabs and switch between them → each tab keeps
   its frontmatter title (it should not revert to the filename).
 - **#256 — non-Latin keys.** `cjk-key.md` has a `完稿` frontmatter key. Set the Explorer
-  template to `{{完稿}}` (Settings → Front Matter Title → Explorer) → `cjk-key` shows
+  template to `{{完稿}}` (Settings → Meaningful Name → Explorer) → `cjk-key` shows
   **完成稿件** (a composite template with a non-Latin key now works).
 - **#270 — startup notices.** The "Loading…" notifications on startup now appear only when
   Debug mode is enabled.

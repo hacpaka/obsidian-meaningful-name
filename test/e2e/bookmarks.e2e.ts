@@ -2,7 +2,7 @@ import { browser, expect } from "@wdio/globals";
 
 // #257 — title substitution for files bookmarked INSIDE a group. The fixture
 // bookmarks 202208251731.md (title "Hello From Frontmatter") inside "My Group".
-describe("Front Matter Title — Bookmarks inside a group (#257)", function () {
+describe("Meaningful Name — Bookmarks inside a group (#257)", function () {
     const paneText = async (): Promise<string> =>
         browser.execute(
             () => document.querySelector(".workspace-leaf-content[data-type='bookmarks']")?.textContent ?? ""

@@ -3,7 +3,7 @@ import { browser, expect } from "@wdio/globals";
 // Regression for #277 — the tab header should show the frontmatter title.
 // First check the general case (open in a new tab), then the global-search case
 // the issue is specifically about.
-describe("Front Matter Title — Tab title (#277)", function () {
+describe("Meaningful Name — Tab title (#277)", function () {
     async function activeTabTitles(): Promise<string[]> {
         return browser.execute(() =>
             Array.from(document.querySelectorAll(".workspace-tab-header-inner-title")).map(e => e.textContent ?? "")

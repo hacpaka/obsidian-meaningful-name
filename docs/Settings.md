@@ -1,6 +1,6 @@
 # Settings reference
 
-Everything in **Settings → Front Matter Title**, beyond [Features](./Features.md) and [Templates](./Templates.md). Open it via **Settings → Community plugins → Front Matter Title**.
+Everything in **Settings → Meaningful Name**, beyond [Features](./Features.md) and [Templates](./Templates.md). Open it via **Settings → Community plugins → Meaningful Name**.
 
 - [Rules](#rules) — limit which files are processed and how list values are handled
 - [Util](#util) — boot behavior and debugging

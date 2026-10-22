@@ -25,7 +25,7 @@ function changelogSection(version: string): string {
 const version: string = JSON.parse(fs.readFileSync("manifest.json", "utf-8")).version;
 const notes = changelogSection(version);
 
-describe("Front Matter Title — update notice modal", function () {
+describe("Meaningful Name — update notice modal", function () {
     async function modalText(): Promise<string> {
         return browser.execute(() => {
             const m = document.querySelector(".modal-container .modal");
@@ -40,7 +40,7 @@ describe("Front Matter Title — update notice modal", function () {
             const text = await browser.waitUntil(
                 async () => {
                     const t = await modalText();
-                    return t.includes("What's new in Front Matter Title") ? t : false;
+                    return t.includes("What's new in Meaningful Name") ? t : false;
                 },
                 { timeout: 20000, timeoutMsg: "the update notice modal did not appear" }
             );
@@ -53,7 +53,7 @@ describe("Front Matter Title — update notice modal", function () {
             await browser.reloadObsidian({ vault: "test/vaults/update" });
             // Give the plugin time to boot and (not) open the modal.
             await browser.pause(3000);
-            expect(await modalText()).not.toContain("What's new in Front Matter Title");
+            expect(await modalText()).not.toContain("What's new in Meaningful Name");
         });
     }
 });

@@ -20,17 +20,17 @@ import * as path from "path";
  *   ./dnode-e2e.sh npm run shots
  */
 
-const PLUGIN_ID = "obsidian-front-matter-title-plugin";
+const PLUGIN_ID = "obsidian-meaningful-name-plugin";
 const OUT = path.resolve("docs/img");
 const ACTIVATION = 5000; // bind() activation gate, see E2E_TEST_PLAN.md
 
 const cmd = (id: string) => browser.executeObsidian(({ app }, c) => (app as any).commands.executeCommandById(c), id);
 const disableFeatures = async () => {
-    await cmd(`${PLUGIN_ID}:ofmt-features-stop`);
+    await cmd(`${PLUGIN_ID}:omn-features-stop`);
     await browser.pause(1500);
 };
 const reloadFeatures = async () => {
-    await cmd(`${PLUGIN_ID}:ofmt-features-reload`);
+    await cmd(`${PLUGIN_ID}:omn-features-reload`);
     await browser.pause(1500);
 };
 
@@ -91,7 +91,7 @@ const highlight = (container: string, itemSel: string, text: string) =>
             const tr = target.getBoundingClientRect();
             const pad = 4;
             const ring = document.createElement("div");
-            ring.setAttribute("data-ofmt-shot", "1");
+            ring.setAttribute("data-omn-shot", "1");
             Object.assign(ring.style, {
                 position: "absolute",
                 left: `${tr.left - cr.left + c.scrollLeft - pad}px`,
@@ -115,7 +115,7 @@ const highlight = (container: string, itemSel: string, text: string) =>
     );
 
 const clearHighlight = () =>
-    browser.execute(() => document.querySelectorAll("[data-ofmt-shot]").forEach(e => e.remove()));
+    browser.execute(() => document.querySelectorAll("[data-omn-shot]").forEach(e => e.remove()));
 
 /** Capture the ON state with a spotlight on the changed item. */
 const shotHighlighted = async (container: string, itemSel: string, text: string, name: string) => {
@@ -124,7 +124,7 @@ const shotHighlighted = async (container: string, itemSel: string, text: string,
     await clearHighlight();
 };
 
-describe("Front Matter Title — documentation screenshots", function () {
+describe("Meaningful Name — documentation screenshots", function () {
     before(async function () {
         await browser.pause(ACTIVATION);
         try {
@@ -282,10 +282,10 @@ describe("Front Matter Title — documentation screenshots", function () {
         // headers (which are 0-width and can't be screenshotted).
         const TABS = ".workspace-split.mod-root .workspace-tab-header-container";
         // The whole header bar of the ACTIVE leaf. The Header feature hides the
-        // original title and appends its own `.view-header-title[data-ofmt]`, so
+        // original title and appends its own `.view-header-title[data-omn]`, so
         // we shoot the bar and wait on that element for the ON state.
         const HEADER = ".workspace-leaf.mod-active .view-header";
-        const HEADER_TITLE = `${HEADER} .view-header-title[data-ofmt]`;
+        const HEADER_TITLE = `${HEADER} .view-header-title[data-omn]`;
 
         await openFile("202208251731.md");
         await openFile("linker.md");
@@ -301,14 +301,14 @@ describe("Front Matter Title — documentation screenshots", function () {
         await waitForText(TABS, "Hello From Frontmatter");
         await waitForText(HEADER_TITLE, "Hello From Frontmatter");
         await shotHighlighted(TABS, ".workspace-tab-header-inner-title", "Hello From Frontmatter", "Tab On.png");
-        await shotHighlighted(HEADER, ".view-header-title[data-ofmt]", "Hello From Frontmatter", "Heading On.png");
+        await shotHighlighted(HEADER, ".view-header-title[data-omn]", "Hello From Frontmatter", "Heading On.png");
     });
 
     it("Inline title", async function () {
         // Capture the whole note view (inline title + body) so it's clear the
         // change is the big title at the top of the document — not the tab/header.
-        // The Inline feature inserts a visible fake `.inline-title[ofmt-fake-id]`
-        // and hides the original `.inline-title[ofmt-original-id]`.
+        // The Inline feature inserts a visible fake `.inline-title[omn-fake-id]`
+        // and hides the original `.inline-title[omn-original-id]`.
         const VIEW = ".workspace-leaf.mod-active .view-content";
         await openFile("202208251731.md");
 
@@ -317,8 +317,8 @@ describe("Front Matter Title — documentation screenshots", function () {
         await shotHighlighted(VIEW, ".inline-title", "202208251731", "Inline Off.png");
 
         await reloadFeatures();
-        await waitForText(".inline-title[ofmt-fake-id]", "Hello From Frontmatter");
-        await shotHighlighted(VIEW, ".inline-title[ofmt-fake-id]", "Hello From Frontmatter", "Inline On.png");
+        await waitForText(".inline-title[omn-fake-id]", "Hello From Frontmatter");
+        await shotHighlighted(VIEW, ".inline-title[omn-fake-id]", "Hello From Frontmatter", "Inline On.png");
     });
 
     it("Graph", async function () {

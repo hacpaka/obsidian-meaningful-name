@@ -3,8 +3,8 @@ import { injectable } from "inversify";
 @injectable()
 export default class FakeTitleElementService {
     private readonly attr = {
-        fake: "ofmt-fake-id",
-        original: "ofmt-original-id",
+        fake: "omn-fake-id",
+        original: "omn-original-id",
     };
     private elements: Map<string, { original: HTMLElement; fake: HTMLElement; events: string[] }> = new Map();
 

@@ -19,7 +19,7 @@ export default class ReleaseNoticeModal extends Modal {
 
     onOpen(): void {
         const { contentEl, titleEl } = this;
-        titleEl.setText(`What's new in Front Matter Title ${this.version}`);
+        titleEl.setText(`What's new in Meaningful Name ${this.version}`);
 
         const whatsNew = typeof PLUGIN_WHATS_NEW === "string" ? PLUGIN_WHATS_NEW.trim() : "";
         this.component.load();

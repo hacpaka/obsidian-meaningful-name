@@ -1,22 +1,22 @@
 import { browser, expect } from "@wdio/globals";
 
-const RELOAD = "obsidian-front-matter-title-plugin:ofmt-features-reload";
+const RELOAD = "obsidian-meaningful-name-plugin:omn-features-reload";
 
 // T11 — verify the plugin produces no errors while (re)initialising all features.
 // Reload + view switching exercises the same paths as #247 ("TypeError ...
 // isVisible") and #232 ("error if explorer not active view at start").
 // We hook console.error (the plugin's hardening + .catch(console.error) paths all
 // go through it) and assert nothing plugin-related fires.
-describe("Front Matter Title — no errors during feature (re)init (#247, #232)", function () {
+describe("Meaningful Name — no errors during feature (re)init (#247, #232)", function () {
     it("re-initialises all features cleanly, starting from a non-explorer view", async function () {
         // Install the error collector.
         await browser.execute(() => {
-            (window as any).__ofmtErrs = [];
+            (window as any).__omnErrs = [];
             const orig = console.error.bind(console);
-            (window as any).__ofmtOrigErr = orig;
+            (window as any).__omnOrigErr = orig;
             console.error = (...args: any[]) => {
                 try {
-                    (window as any).__ofmtErrs.push(args.map(a => (a && a.stack) || String(a)).join(" "));
+                    (window as any).__omnErrs.push(args.map(a => (a && a.stack) || String(a)).join(" "));
                 } catch {
                     /* ignore */
                 }
@@ -34,14 +34,14 @@ describe("Front Matter Title — no errors during feature (re)init (#247, #232)"
         await browser.executeObsidian((_unused, id) => (window as any).app.commands.executeCommandById(id), RELOAD);
         await browser.pause(2000);
 
-        const errs: string[] = await browser.execute(() => (window as any).__ofmtErrs ?? []);
+        const errs: string[] = await browser.execute(() => (window as any).__omnErrs ?? []);
         // eslint-disable-next-line no-console
         console.log("INIT ERRS >>>", JSON.stringify(errs.slice(0, 20), null, 2));
 
         const bad = errs.filter(e => {
             const m = e.toLowerCase();
             return (
-                m.includes("front-matter-title") ||
+                m.includes("meaningful-name") ||
                 m.includes("isvisible") ||
                 m.includes("cannot read properties") ||
                 m.includes("explorerviewundefined") ||

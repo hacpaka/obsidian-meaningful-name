@@ -1,10 +1,10 @@
 # Templates
 
-A **template** tells the plugin how to build the displayed title for a note. You set it in **Settings → Front Matter Title**.
+A **template** tells the plugin how to build the displayed title for a note. You set it in **Settings → Meaningful Name**.
 
 There are two templates shared by every feature:
 
-- **Common main template** — tried first. Default: `title`.
+- **Common main template** — tried first. Default: `name`.
 - **Common fallback template** — used only when the main template can't be resolved (the key is missing or empty). Default: `fallback_title`.
 
 If both fail, the plugin shows the original filename. A value used as a title must be a **string, number, or list** — objects are not supported.
@@ -21,11 +21,11 @@ Type the name of a frontmatter key. The plugin uses that key's value.
 
 ```yaml
 ---
-title: My readable title
+name: My readable title
 ---
 ```
 
-With the default template `title`, the note above is displayed as **My readable title**.
+With the default template `name`, the note above is displayed as **My readable title**.
 
 **Nested keys** use dot‑notation. Template `book.title` reads:
 

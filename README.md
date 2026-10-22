@@ -1,10 +1,10 @@
-# Front Matter Title
+# Meaningful Name
 
 A plugin for [Obsidian](https://obsidian.md) that shows a **friendly title from your note's frontmatter everywhere in the app — without renaming the file.**
 
 If your notes are named like timestamps (`202208251731.md`), random IDs, or any scheme that isn't human‑readable, this plugin lets you keep those filenames while Obsidian displays the title you actually wrote in the note's frontmatter.
 
-![Front Matter Title — the same file explorer showing filenames versus frontmatter titles](docs/img/hero.png)
+![Meaningful Name — the same file explorer showing filenames versus frontmatter titles](docs/img/hero.png)
 
 > [!IMPORTANT]
 > The plugin **never renames or edits your files.** It only changes what Obsidian *displays*. Your filenames on disk stay exactly as they are.
@@ -37,7 +37,7 @@ See the full list with screenshots in **[Features](./docs/Features.md)**.
 
 ### From the Obsidian app (recommended)
 
-Open **Settings → Community plugins → Browse**, search for **Front Matter Title**, install it and enable it.
+Open **Settings → Community plugins → Browse**, search for **Meaningful Name**, install it and enable it.
 
 ### Using BRAT
 
@@ -45,21 +45,21 @@ Install via the [BRAT](https://github.com/TfTHacker/obsidian42-brat) plugin and 
 
 ### Manual
 
-Download the latest `obsidian-front-matter-title-*.zip` from the [latest release](https://github.com/Snezhig/obsidian-front-matter-title/releases/latest) and unpack it into your vault under `.obsidian/plugins/`.
+Download the latest `obsidian-meaningful-name-plugin-*.zip` from the [latest release](https://github.com/Snezhig/obsidian-front-matter-title/releases/latest) and unpack it into your vault under `.obsidian/plugins/`.
 
 ## Quick start
 
 Three steps, about a minute:
 
-**1. Add a title to a note's frontmatter.** Open any note and put a `title` at the top:
+**1. Add a name to a note's frontmatter.** Open any note and put a `name` at the top:
 
 ```yaml
 ---
-title: My readable note title
+name: My readable note title
 ---
 ```
 
-**2. Tell the plugin which key to read.** Open **Settings → Front Matter Title**. The **Common main template** is `title` by default — that means the plugin reads the `title` key from each note. Leave it as is to use the example above.
+**2. Tell the plugin which key to read.** Open **Settings → Meaningful Name**. The **Common main template** is `name` by default — that means the plugin reads the `name` key from each note. Leave it as is to use the example above.
 
 **3. Turn on where you want it shown.** In the same settings page, enable the **Explorer** feature. The note in your file explorer now shows *My readable note title* instead of the filename.
 

@@ -4,7 +4,7 @@ import { browser, expect } from "@wdio/globals";
 // Baseline on 1.12.7: it does NOT crash, and (once features have activated —
 // the plugin gates feature activation behind a ~3s timer after layout-ready)
 // the Suggest feature substitutes the frontmatter title into the results.
-describe("Front Matter Title — Quick Switcher / Suggest (#268)", function () {
+describe("Meaningful Name — Quick Switcher / Suggest (#268)", function () {
     it("shows the frontmatter title for a path query without crashing", async function () {
         await browser.waitUntil(
             async () => {

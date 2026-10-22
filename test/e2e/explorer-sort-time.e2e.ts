@@ -7,7 +7,7 @@ import { browser, $, expect } from "@wdio/globals";
 // time orders. This test proves time-sort still works with the plugin enabled.
 const ROOT = ["202208251731.md", "node-a.md", "node-z.md"];
 
-describe("Front Matter Title — Explorer time sort not broken (#262)", function () {
+describe("Meaningful Name — Explorer time sort not broken (#262)", function () {
     it("byModifiedTime orders files by mtime, not by name, with the plugin enabled", async function () {
         await browser.executeObsidian(({ app }) => (app as any).commands.executeCommandById("file-explorer:open"));
         await $(".nav-files-container").then(el => el.waitForExist({ timeout: 20000 }));

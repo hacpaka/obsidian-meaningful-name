@@ -4,7 +4,7 @@ import { browser, expect } from "@wdio/globals";
 // On 1.12.7 the plugin hides the original inline-title (display:none) and shows
 // only its own with the frontmatter title — so this asserts a single VISIBLE
 // inline title equal to the frontmatter value (the bug would show two).
-describe("Front Matter Title — InlineTitle has no duplicate (#234)", function () {
+describe("Meaningful Name — InlineTitle has no duplicate (#234)", function () {
     it("shows exactly one visible inline title = frontmatter title", async function () {
         await browser.pause(4500); // feature activation gate
         await browser.executeObsidian(({ app }) => app.workspace.openLinkText("202208251731", "", true));
@@ -44,7 +44,7 @@ describe("Front Matter Title — InlineTitle has no duplicate (#234)", function 
     it("stays single-titled under a theme that styles .inline-title (#280)", async function () {
         await browser.execute(() => {
             const style = document.createElement("style");
-            style.id = "ofmt-e2e-theme";
+            style.id = "omn-e2e-theme";
             style.textContent = ".inline-title { display: flex !important; }";
             document.head.appendChild(style);
         });
@@ -81,7 +81,7 @@ describe("Front Matter Title — InlineTitle has no duplicate (#234)", function 
 // fake title element while leaving the original hidden, so the note was left
 // with no title at all until a reload. Creating a non-markdown file via the API
 // is the same code path as the image drop, without needing real drag & drop.
-describe("Front Matter Title — InlineTitle survives attachment creation (#285)", function () {
+describe("Meaningful Name — InlineTitle survives attachment creation (#285)", function () {
     const attachment = "pasted-image.png";
 
     async function visibleTitles(): Promise<string[]> {
@@ -107,7 +107,7 @@ describe("Front Matter Title — InlineTitle survives attachment creation (#285)
 
     it("keeps the note title after a new attachment is created", async function () {
         // Drop the theme rule the #280 case injected, so this runs on the plain path.
-        await browser.execute(() => document.getElementById("ofmt-e2e-theme")?.remove());
+        await browser.execute(() => document.getElementById("omn-e2e-theme")?.remove());
 
         await browser.pause(4500); // feature activation gate
         await browser.executeObsidian(({ app }) => app.workspace.openLinkText("202208251731", "", true));

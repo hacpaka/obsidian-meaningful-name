@@ -48,10 +48,10 @@ export default class FeatureComposer {
             feature[state ? "enable" : "disable"]();
         } catch (e) {
             this.logger.log(`Feature - ${id} failed to ${state ? "enable" : "disable"}: ${e}`);
-            console.error(`[front-matter-title] feature "${id}" failed to ${state ? "enable" : "disable"}`, e);
+            console.error(`[meaningful-name] feature "${id}" failed to ${state ? "enable" : "disable"}`, e);
             if (state) {
                 new Notice(
-                    `[Front Matter Title] Feature "${id}" was disabled due to an error. See console for details.`
+                    `[Meaningful Name] Feature "${id}" was disabled due to an error. See console for details.`
                 );
                 try {
                     feature.disable();
@@ -76,7 +76,7 @@ export default class FeatureComposer {
             try {
                 feature.disable();
             } catch (e) {
-                console.error(`[front-matter-title] feature "${feature.getId()}" failed to disable`, e);
+                console.error(`[meaningful-name] feature "${feature.getId()}" failed to disable`, e);
             }
         }
         this.features = {};

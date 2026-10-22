@@ -6,7 +6,7 @@ async function explorerTitles(): Promise<string[]> {
     );
 }
 
-describe("Front Matter Title — Explorer updates (#250, #245)", function () {
+describe("Meaningful Name — Explorer updates (#250, #245)", function () {
     // T3 — #245: starting on a non-Files view must still apply titles once the
     // explorer is opened.
     it("applies titles when the explorer is opened after starting elsewhere (#245)", async function () {

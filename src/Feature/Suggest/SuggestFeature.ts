@@ -52,7 +52,7 @@ export default class SuggestFeature extends AbstractFeature<Feature> {
 
     private createChooserReplacer(chooser: Newable<Chooser>): void {
         if (typeof chooser?.prototype?.setSuggestions !== "function") {
-            console.error("[front-matter-title] Chooser.setSuggestions not found, Suggest feature degraded.");
+            console.error("[meaningful-name] Chooser.setSuggestions not found, Suggest feature degraded.");
             return;
         }
         this.replacer = FunctionReplacer.tryCreate(

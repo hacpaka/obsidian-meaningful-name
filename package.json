@@ -1,5 +1,5 @@
 {
-  "name": "obsidian-front-matter-title",
+  "name": "obsidian-meaningful-name",
   "version": "4.2.1",
   "description": "This is a sample plugin for Obsidian (https://obsidian.md)",
   "main": "main.js",

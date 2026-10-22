@@ -9,7 +9,7 @@ No. By default it only changes what Obsidian **displays** — your filenames and
 Go down this list:
 
 1. **Is the feature enabled?** Titles only appear where you turned a [feature](./Features.md) on (e.g. Explorer).
-2. **Does the template match your frontmatter?** The default [template](./Templates.md) is `title`, so the note needs a `title:` key. If you use another key, set it as the **Common main template**.
+2. **Does the template match your frontmatter?** The default [template](./Templates.md) is `name`, so the note needs a `name:` key. If you use another key, set it as the **Common main template**.
 3. **Is the value a supported type?** It must be a **string, number, or list**. An object (nested map with no leaf value) is ignored.
 4. **Is the file excluded by a rule?** Check **Rules → File path rule** — a white/black list may be skipping it. See [Settings](./Settings.md#rules).
 5. **Stale title?** Run the **Reload features** command (**Ctrl/Cmd+P**).
