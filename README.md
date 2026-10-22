@@ -39,10 +39,6 @@ See the full list with screenshots in **[Features](./docs/Features.md)**.
 
 Open **Settings → Community plugins → Browse**, search for **Meaningful Name**, install it and enable it.
 
-### Using BRAT
-
-Install via the [BRAT](https://github.com/TfTHacker/obsidian42-brat) plugin and point it at this repository.
-
 ### Manual
 
 Download the latest `obsidian-meaningful-name-plugin-*.zip` from the [latest release](https://github.com/Snezhig/obsidian-front-matter-title/releases/latest) and unpack it into your vault under `.obsidian/plugins/`.
@@ -71,14 +67,14 @@ That's it. Enable more places from **[Features](./docs/Features.md)**, and learn
 
 Looking to integrate with another plugin? See the [API provider](https://github.com/Snezhig/front-matter-plguin-api-provider).
 
-## Thank you
-
-If you like this plugin and would like to buy me a coffee, you can!
-
-<a href="https://www.buymeacoffee.com/snezhig" target="_blank">
-<img src="https://cdn.buymeacoffee.com/buttons/v2/default-violet.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" >
-</a>
-
 ## Note
 
 Feel free to open an issue for bugs, mistakes, or ideas for this plugin.
+
+## Origin and license
+
+Meaningful Name is a modified version of [Front Matter Title](https://github.com/snezhig/obsidian-front-matter-title) by [Snezhig](https://github.com/snezhig) and its contributors. The original code and all its history are kept in this repository.
+
+Modified by [hacpaka](https://github.com/hacpaka) since 2026-10-22: the plugin was renamed (new plugin id, so it installs separately from the original) and reads the `name` frontmatter key by default instead of `title`. See the [changelog](./CHANGELOG.md) for details.
+
+Like the original, this plugin is free software under the [GNU General Public License v3.0](./LICENSE).

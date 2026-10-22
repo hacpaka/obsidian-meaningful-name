@@ -6,6 +6,15 @@ compare link. Headings must be `## X.Y.Z` (the version, no `v`) so CI can find t
 
 At release time, rename `## Unreleased` to the version being released.
 
+## Unreleased
+
+### Changed
+- Forked from [Front Matter Title](https://github.com/snezhig/obsidian-front-matter-title) by Snezhig and renamed
+  to **Meaningful Name**. The plugin id is now `obsidian-meaningful-name-plugin`, so it installs separately and
+  does not pick up the original's settings or hotkeys.
+- The default common main template is now `name` instead of `title`.
+- `package.json` now declares GPL-3.0, the license in `LICENSE`, instead of MIT.
+
 ## 4.2.0
 
 ### Added

@@ -18,8 +18,8 @@
     "pretty": "prettier --write *.ts *.json src test --ignore-path package-lock.json"
   },
   "keywords": [],
-  "author": "snezhig",
-  "license": "MIT",
+  "author": "hacpaka",
+  "license": "GPL-3.0-only",
   "overrides": {
     "semver": ">=7.5.2",
     "serialize-javascript": ">=7.0.6",
