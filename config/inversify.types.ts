@@ -65,8 +65,7 @@ const SI = {
 };
 
 for (const key of Object.keys(SI)) {
-    //@ts-ignore
-    SI[key] = Symbol.for(key);
+    (SI as Record<string, string | symbol>)[key] = Symbol.for(key);
 }
 
 export default SI;

@@ -218,8 +218,6 @@ export default class SettingsTab {
     }
 
     private rules(): SettingDefinition[] {
-        const mode = () => this.storage.get("rules").get("paths").get("mode").value();
-        const join = () => this.storage.get("rules").get("delimiter").get("enabled").value();
         return [
             {
                 name: t("rule.path.name"),
@@ -234,7 +232,7 @@ export default class SettingsTab {
                 (m): SettingDefinition => ({
                     name: t(`rule.path.${m}.name`),
                     desc: t(`rule.path.${m}.desc`),
-                    visible: () => mode() === m,
+                    visible: () => this.storage.get("rules").get("paths").get("mode").value() === m,
                     control: { type: "textarea", key: PATHS },
                 })
             ),
@@ -249,7 +247,7 @@ export default class SettingsTab {
             },
             {
                 name: t("rule.delimiter.value"),
-                visible: join,
+                visible: () => this.storage.get("rules").get("delimiter").get("enabled").value(),
                 control: {
                     type: "text",
                     key: "rules.delimiter.value",
@@ -355,10 +353,11 @@ export default class SettingsTab {
     private featureTemplates(feature: Feature): SettingDefinition[] {
         const common = this.storage.get("templates").get("common");
         return (["main", "fallback"] as const).map(type => {
-            const own = this.storage.get("features").get(feature).get("templates").get(type).value();
             return {
                 name: t(`template.${type}`),
-                desc: own ? t("template.specific") : t("template.used", { value: common.get(type).value() }),
+                desc: this.storage.get("features").get(feature).get("templates").get(type).value()
+                    ? t("template.specific")
+                    : t("template.used", { value: common.get(type).value() }),
                 control: {
                     type: "text",
                     key: `features.${feature}.templates.${type}`,

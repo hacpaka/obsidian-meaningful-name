@@ -66,7 +66,7 @@ describe("Test fillFrom", () => {
     type obj = {
         foo: { bar?: number };
         baz: string;
-        qux: any[];
+        qux: unknown[];
         thud: number;
         que: string[] | { objKey: string };
     };

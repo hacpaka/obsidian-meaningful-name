@@ -7,13 +7,16 @@ import { SettingsEvent, SettingsType } from "@src/Settings/SettingsType";
 import PluginHelper from "../../src/Utils/PluginHelper";
 import EventDispatcherInterface from "@src/Components/EventDispatcher/Interfaces/EventDispatcherInterface";
 
-(global as any).PLUGIN_VERSION = "test-version";
+(global as unknown as { PLUGIN_VERSION: string }).PLUGIN_VERSION = "test-version";
 const spy = {
-    addListener: jest.spyOn<EventDispatcherInterface<any>, "addListener">(
+    addListener: jest.spyOn<EventDispatcherInterface<SettingsEvent>, "addListener">(
         Container.get(SI["event:dispatcher"]),
         "addListener"
     ),
-    dispatch: jest.spyOn<EventDispatcherInterface<any>, "dispatch">(Container.get(SI["event:dispatcher"]), "dispatch"),
+    dispatch: jest.spyOn<EventDispatcherInterface<SettingsEvent>, "dispatch">(
+        Container.get(SI["event:dispatcher"]),
+        "dispatch"
+    ),
     compare: jest.spyOn(ObjectHelper, "compare"),
 };
 

@@ -44,7 +44,6 @@ export default class App {
             this.container.get<LoggerComposer>(SI["logger:composer"])[actual.debug ? "enable" : "disable"]();
         }
 
-        const dispatcher = this.container.get<EventDispatcherInterface<events>>(SI["event:dispatcher"]);
-        dispatcher.dispatch("resolver:clear", null);
+        this.container.get<EventDispatcherInterface<events>>(SI["event:dispatcher"]).dispatch("resolver:clear", null);
     }
 }

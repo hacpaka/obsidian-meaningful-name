@@ -9,11 +9,15 @@ export default abstract class AbstractManager extends AbstractFeature<Feature> i
     protected resolver: ResolverInterface;
 
     disable(): void {
-        this.isEnabled() && this.doDisable();
+        if (this.isEnabled()) {
+            this.doDisable();
+        }
     }
 
     enable(): void {
-        !this.isEnabled() && this.doEnable();
+        if (!this.isEnabled()) {
+            this.doEnable();
+        }
     }
 
     async update(path: string): Promise<boolean> {

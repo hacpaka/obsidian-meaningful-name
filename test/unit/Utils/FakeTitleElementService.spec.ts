@@ -73,8 +73,8 @@ describe("FakeTitleElementService", () => {
 
     // Obsidian polyfills these on the globals/prototypes at runtime.
     beforeAll(() => {
-        (global as any).createEl = () => new StubElement();
-        (Array.prototype as any).contains ??= function (this: unknown[], value: unknown) {
+        (global as unknown as { createEl: () => StubElement }).createEl = () => new StubElement();
+        (Array.prototype as unknown as { contains: unknown }).contains ??= function (this: unknown[], value: unknown) {
             return this.includes(value);
         };
     });

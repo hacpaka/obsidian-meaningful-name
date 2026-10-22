@@ -14,11 +14,12 @@ import { FunctionReplacerFactory } from "@config/inversify.factory.types";
 import FunctionReplacer from "../../../../src/Utils/FunctionReplacer";
 import Event from "@src/Components/EventDispatcher/Event";
 import { Feature } from "@src/Enum";
+import ListenerRef from "@src/Components/EventDispatcher/Interfaces/ListenerRef";
 
 let facade: MockProxy<ObsidianFacade>;
 let callback: Callback<AppEvents[keyof AppEvents]>;
-let dispatcher: MockProxy<EventDispatcherInterface<any>>;
-let refs: [any?, any?];
+let dispatcher: MockProxy<EventDispatcherInterface<AppEvents>>;
+let refs: ListenerRef<keyof AppEvents>[];
 let featureService: MockProxy<FeatureService>;
 let sort: ExplorerSort;
 let view: MockProxy<TFileExplorerView>;
@@ -29,7 +30,7 @@ let replacerFactory: jest.Mock<
 beforeEach(() => {
     refs = [];
     facade = mock<ObsidianFacade>();
-    dispatcher = mock<EventDispatcherInterface<any>>();
+    dispatcher = mock<EventDispatcherInterface<AppEvents>>();
     dispatcher.addListener.mockImplementation(({ name, cb }) => {
         callback = cb;
         const ref = { getName: () => name };
@@ -40,7 +41,7 @@ beforeEach(() => {
     featureService.createResolver.mockReturnValue(mock<ResolverInterface>());
     view = mock<TFileExplorerView>();
     replacerFactory = jest.fn();
-    // @ts-ignore
+    // @ts-expect-error requestSort is readonly on the view type
     view.requestSort = jest.fn();
     sort = new ExplorerSort(mock<LoggerInterface>(), facade, dispatcher, featureService, replacerFactory);
 });

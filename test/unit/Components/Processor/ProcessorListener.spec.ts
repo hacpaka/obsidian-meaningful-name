@@ -88,7 +88,7 @@ describe("Test 'resolver:resolved' listener", () => {
         );
     });
     const modify = jest.fn();
-    const dispatch = (value: any, path: string) => {
+    const dispatch = (value: unknown, path: string) => {
         mockDispatcher.dispatch("resolver:resolved", new Event({ modify, value, path }));
     };
 

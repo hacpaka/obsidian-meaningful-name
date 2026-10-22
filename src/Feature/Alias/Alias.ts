@@ -54,7 +54,6 @@ export default class Alias {
     }
 
     private modify(alias: string | string[]): void {
-        const key = this.getKey() ?? this.getPossibleKeys()[0];
-        this.cache[key] = alias;
+        this.cache[this.getKey() ?? this.getPossibleKeys()[0]] = alias;
     }
 }

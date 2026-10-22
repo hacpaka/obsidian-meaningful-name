@@ -70,14 +70,12 @@ export default class NoteLinkFeature extends AbstractFeature<Feature> {
         if (!destTitle || destTitle === link.alias) {
             return false;
         }
-        const hasAlias = /.+\|.+/.test(link.original);
-        return this.config.strategy === NoteLinkStrategy.All || !hasAlias;
+        return this.config.strategy === NoteLinkStrategy.All || !/.+\|.+/.test(link.original);
     }
 
     private async requestApprove(path: string): Promise<void> {
-        const links = this.service.getNoteLinks(path);
         const changes = [];
-        for (const link of links) {
+        for (const link of this.service.getNoteLinks(path)) {
             const title = this.resolver.resolve(link.dest);
 
             if (this.shouldChangeLink(link, title)) {
@@ -91,8 +89,7 @@ export default class NoteLinkFeature extends AbstractFeature<Feature> {
             return;
         }
 
-        const exec = this.config.approval ? await this.approve.request(path, changes) : true;
-        if (exec) {
+        if (this.config.approval ? await this.approve.request(path, changes) : true) {
             await this.executeChanges(path, changes);
         }
     }

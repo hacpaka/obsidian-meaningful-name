@@ -14,7 +14,6 @@ describe("Test Creator", () => {
     const mockPlaceholder = mock<TemplatePlaceholderInterface>();
     const mockLogger = mock<LoggerInterface>();
     const mockFactory = mock<TemplateFactory>();
-    // @ts-ignore
     mockTemplate.getPlaceholders.mockReturnValue([mockPlaceholder]);
     mockTemplate.getTemplate.mockReturnValue(templateStr);
     mockFactory.create.mockReturnValue(mockTemplate);

@@ -1,5 +1,8 @@
 import { browser, expect } from "@wdio/globals";
 
+// The leaf members this spec reads are internal to Obsidian.
+type Leaf = { id: string; tabHeaderInnerTitleEl?: HTMLElement };
+
 // Regression for #277 — the tab header should show the frontmatter title.
 // First check the general case (open in a new tab), then the global-search case
 // the issue is specifically about.
@@ -29,17 +32,20 @@ describe("Meaningful Name — Tab title (#277)", function () {
         await browser.pause(1000);
 
         const before: string[] = await browser.executeObsidian(({ app }) =>
-            (app.workspace as any).getLeavesOfType("markdown").map((l: any) => l.id)
+            (app.workspace.getLeavesOfType("markdown") as unknown as Leaf[]).map(l => l.id)
         );
 
         await browser.executeObsidianCommand("global-search:open");
         await browser.executeObsidian(({ app }) => {
-            const view: any = (app.workspace as any).getLeavesOfType("search")[0]?.view;
-            view?.setQuery("zettelkasten");
+            (
+                app.workspace.getLeavesOfType("search")[0]?.view as unknown as
+                    | { setQuery(query: string): void }
+                    | undefined
+            )?.setQuery("zettelkasten");
         });
 
         const selector = ".workspace-leaf-content[data-type='search'] .search-result-file-title";
-        await browser.$(selector).then(el => el.waitForExist({ timeout: 20000 }));
+        await browser.$(selector).waitForExist({ timeout: 20000 });
 
         // Mod+click on a search result is what opens it in a new tab. Synthesize the
         // event instead of holding a modifier through the driver — it still goes
@@ -54,10 +60,10 @@ describe("Meaningful Name — Tab title (#277)", function () {
         const title = await browser.waitUntil(
             async () => {
                 const found = await browser.executeObsidian(({ app }, ids: string[]) => {
-                    const leaf: any = (app.workspace as any)
-                        .getLeavesOfType("markdown")
-                        .find((l: any) => !ids.includes(l.id));
-                    return leaf?.tabHeaderInnerTitleEl?.textContent ?? null;
+                    return (
+                        (app.workspace.getLeavesOfType("markdown") as unknown as Leaf[]).find(l => !ids.includes(l.id))
+                            ?.tabHeaderInnerTitleEl?.textContent ?? null
+                    );
                 }, before);
                 return found || false;
             },

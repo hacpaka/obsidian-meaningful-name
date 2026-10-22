@@ -60,7 +60,7 @@ test("Should try to refresh all", async () => {
     foo.refresh.mockResolvedValueOnce({ [path]: true });
     const bar = mock<ManagerFeatureInterface & FeatureInterface<Feature>>();
     bar.refresh.mockResolvedValueOnce({ [path]: false });
-    const result: { [K in Feature]?: any } = {};
+    const result: { [K in Feature]?: { [path: string]: boolean } } = {};
     mockComposer.get.mockImplementationOnce((id: Feature) => {
         result[id] = { [path]: true };
         return foo;

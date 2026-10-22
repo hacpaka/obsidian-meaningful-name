@@ -8,6 +8,9 @@ import LoggerInterface from "@src/Components/Debug/LoggerInterface";
 import { ResolverInterface } from "@src/Resolver/Interfaces";
 import { AppEvents } from "@src/Types";
 
+// What mock<T>() accepts as its implementation: a deep partial of T.
+type Input<T> = Parameters<typeof mock<T>>[0];
+
 const dispatcher = mock<EventDispatcherInterface<AppEvents>>();
 const facade = mock<ObsidianFacade>();
 const logger = mock<LoggerInterface>();
@@ -16,11 +19,11 @@ const resolver = mock<ResolverInterface>();
 
 const createView = (path: string, leafId: string): MarkdownViewExt =>
     mock<MarkdownViewExt>({
-        file: { path } as any,
+        file: { path },
         inlineTitleEl: mock<HTMLDivElement>(),
-        leaf: { id: leafId } as any,
+        leaf: { id: leafId },
         getState: () => ({ mode: "source" }),
-    } as any);
+    } as unknown as Input<MarkdownViewExt>);
 
 describe("InlineTitleManager", () => {
     let manager: InlineTitleManager;

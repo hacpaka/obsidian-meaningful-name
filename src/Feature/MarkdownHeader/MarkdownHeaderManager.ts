@@ -62,12 +62,10 @@ export class MarkdownHeaderManager extends AbstractManager {
     }
 
     private async innerUpdate(path: string = null): Promise<boolean> {
-        const views = this.facade.getViewsOfType<MarkdownViewExt>(Leaves.MD);
         let updated = false;
-        for (const view of views) {
+        for (const view of this.facade.getViewsOfType<MarkdownViewExt>(Leaves.MD)) {
             if (view.file && (!path || view.file.path === path)) {
-                const title = this.resolver.resolve(view.file.path);
-                this.setTitle(view, title);
+                this.setTitle(view, this.resolver.resolve(view.file.path));
                 updated = true;
             }
         }
@@ -77,13 +75,11 @@ export class MarkdownHeaderManager extends AbstractManager {
 
     private setTitle(view: MarkdownViewExt, title: string | null): void {
         this.logger.log(`Set title "${title ?? " "}" for ${view.file.path}`);
-        const container = view.titleContainerEl;
-
         if (!title) {
             return this.revert(view);
         }
 
-        let el = this.findExistingFakeEl(container);
+        let el = this.findExistingFakeEl(view.titleContainerEl);
 
         if (title && el && el.innerText === title && !el.hidden) {
             return this.logger.log(`Set title "${title}" for ${view.file.path} is skipped`);

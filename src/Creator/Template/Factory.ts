@@ -12,8 +12,7 @@ export default class Factory {
     ) {}
 
     public create(template: string): TemplateInterface {
-        const type = new RegExp(this.pattern).test(template) ? "composite" : "simple";
-        const obj = this.factory(type);
+        const obj = this.factory(new RegExp(this.pattern).test(template) ? "composite" : "simple");
         obj.setTemplate(template);
         return obj;
     }

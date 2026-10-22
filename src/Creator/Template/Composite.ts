@@ -20,9 +20,7 @@ export default class Composite implements TemplateInterface {
 
     getPlaceholders(): TemplatePlaceholderInterface[] {
         if (this.placeholders.length === 0) {
-            const parts = this.template.match(new RegExp(this.pattern, "g"));
-
-            for (const part of parts) {
+            for (const part of this.template.match(new RegExp(this.pattern, "g"))) {
                 const {
                     groups: { placeholder },
                 } = part.match(this.pattern);

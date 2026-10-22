@@ -3,7 +3,7 @@ import { mock } from "jest-mock-extended";
 import ExtractorInterface from "@src/Components/Extractor/Interfaces/ExtractorInterface";
 
 const obj = { test: "test" };
-const factory = jest.fn((path: string) => obj);
+const factory = jest.fn((_path: string) => obj);
 const placeholder = "_basename";
 const mockExtractor = mock<ExtractorInterface>();
 const filePlaceholder = new FilePlaceholder(mockExtractor, factory);

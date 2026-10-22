@@ -1,4 +1,4 @@
-import { browser, $, expect } from "@wdio/globals";
+import { browser, $ } from "@wdio/globals";
 
 // Regression for #262 — Explorer sort by frontmatter title.
 // Fixture filenames sort node-a < node-z, but their titles are Zebra / Apple,

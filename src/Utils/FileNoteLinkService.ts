@@ -14,9 +14,8 @@ export default class FileNoteLinkService {
     ) {}
 
     public getNoteLinks(path: string): NoteLink[] {
-        const links = this.facade.getFileLinksCache(path);
         const result: NoteLink[] = [];
-        for (const link of links) {
+        for (const link of this.facade.getFileLinksCache(path)) {
             if (!this.REGEXP.test(link.original)) {
                 continue;
             }

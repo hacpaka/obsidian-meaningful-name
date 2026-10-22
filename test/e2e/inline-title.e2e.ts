@@ -13,7 +13,9 @@ describe("Meaningful Name — InlineTitle has no duplicate (#234)", function () 
             async () => {
                 const titles: { text: string; visible: boolean }[] = await browser.execute(() => {
                     const active = document.querySelector(".workspace-leaf.mod-active");
-                    if (!active) return [];
+                    if (!active) {
+                        return [];
+                    }
                     return Array.from(active.querySelectorAll(".inline-title")).map(e => {
                         const el = e as HTMLElement;
                         const cs = getComputedStyle(el);
@@ -56,7 +58,9 @@ describe("Meaningful Name — InlineTitle has no duplicate (#234)", function () 
             async () => {
                 const titles: { text: string; visible: boolean }[] = await browser.execute(() => {
                     const active = document.querySelector(".workspace-leaf.mod-active");
-                    if (!active) return [];
+                    if (!active) {
+                        return [];
+                    }
                     return Array.from(active.querySelectorAll(".inline-title")).map(e => {
                         const el = e as HTMLElement;
                         const cs = getComputedStyle(el);
@@ -90,7 +94,9 @@ describe("Meaningful Name — InlineTitle survives attachment creation (#285)", 
     async function visibleTitles(): Promise<string[]> {
         return browser.execute(() => {
             const active = document.querySelector(".workspace-leaf.mod-active");
-            if (!active) return [];
+            if (!active) {
+                return [];
+            }
             return Array.from(active.querySelectorAll(".inline-title"))
                 .filter(e => {
                     const el = e as HTMLElement;
@@ -103,8 +109,10 @@ describe("Meaningful Name — InlineTitle survives attachment creation (#285)", 
 
     after(async function () {
         await browser.executeObsidian(async ({ app }, file: string) => {
-            const existing = (app.vault as any).getAbstractFileByPath(file);
-            if (existing) await app.vault.delete(existing);
+            const existing = app.vault.getAbstractFileByPath(file);
+            if (existing) {
+                await app.vault.delete(existing);
+            }
         }, attachment);
     });
 
@@ -121,8 +129,10 @@ describe("Meaningful Name — InlineTitle survives attachment creation (#285)", 
         });
 
         await browser.executeObsidian(async ({ app }, file: string) => {
-            const existing = (app.vault as any).getAbstractFileByPath(file);
-            if (existing) await app.vault.delete(existing);
+            const existing = app.vault.getAbstractFileByPath(file);
+            if (existing) {
+                await app.vault.delete(existing);
+            }
             // A 1x1 PNG — content does not matter, only that a non-markdown file
             // is created while the note is open, exactly as an image drop does.
             await app.vault.createBinary(file, new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]).buffer);

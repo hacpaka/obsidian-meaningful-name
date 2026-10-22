@@ -11,15 +11,16 @@ const manifest = JSON.parse(manifestStr);
 // of a hardcoded message. Same source as the GitHub Release notes.
 function readWhatsNew(version) {
 	try {
-		const lines = fs.readFileSync("CHANGELOG.md", "utf-8").split(/\r?\n/);
 		const out = [];
 		let capture = false;
-		for (const line of lines) {
+		for (const line of fs.readFileSync("CHANGELOG.md", "utf-8").split(/\r?\n/)) {
 			if (line.startsWith("## ")) {
 				capture = line.slice(3).trim() === version;
 				continue;
 			}
-			if (capture) out.push(line);
+			if (capture) {
+				out.push(line);
+			}
 		}
 		return out.join("\n").trim();
 	} catch {

@@ -20,7 +20,6 @@ const mockDispatcher = mock<EventDispatcherInterface<ResolverEvents & AppEvents>
 const mockResolver = mock<ResolverDynamicInterface>();
 
 let metadataCacheChangedCallback: Callback<AppEvents["metadata:cache:changed"]> = null;
-let fileRenameCallback: Callback<AppEvents["file:rename"]> = null;
 let clearCallback: Callback<ResolverEvents["resolver:clear"]> = null;
 
 mockDispatcher.addListener.mockImplementation(({ name, cb }) => {
@@ -32,7 +31,6 @@ mockDispatcher.addListener.mockImplementation(({ name, cb }) => {
             clearCallback = cb;
             break;
         case "file:rename":
-            fileRenameCallback = cb;
             break;
         default:
             throw new Error(`Event ${name} is not expected`);

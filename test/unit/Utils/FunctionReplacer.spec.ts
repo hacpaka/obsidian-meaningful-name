@@ -24,7 +24,7 @@ describe("FunctionReplacer.tryCreate (fail-soft)", () => {
     });
 
     test("returns null (no throw) when the method is missing", () => {
-        const target = { notAFunction: 42 } as any;
+        const target = { notAFunction: 42 } as unknown as { notAFunction: () => void };
         const replacer = FunctionReplacer.tryCreate(target, "notAFunction", null, () => undefined);
 
         expect(replacer).toBeNull();
@@ -32,12 +32,17 @@ describe("FunctionReplacer.tryCreate (fail-soft)", () => {
     });
 
     test("returns null (no throw) when the target is null", () => {
-        const replacer = FunctionReplacer.tryCreate(null as any, "whatever" as any, null, () => undefined);
+        const replacer = FunctionReplacer.tryCreate(
+            null as { whatever: () => void },
+            "whatever",
+            null,
+            () => undefined
+        );
         expect(replacer).toBeNull();
     });
 
     test("create still throws on a missing method (strict path unchanged)", () => {
-        const target = { x: 1 } as any;
+        const target = { x: 1 } as unknown as { x: () => void };
         expect(() => FunctionReplacer.create(target, "x", null, () => undefined)).toThrow();
     });
 });

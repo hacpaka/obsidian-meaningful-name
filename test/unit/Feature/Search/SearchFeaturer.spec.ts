@@ -2,7 +2,7 @@ import { mock } from "jest-mock-extended";
 import ObsidianFacade from "@src/Obsidian/ObsidianFacade";
 import LoggerInterface from "@src/Components/Debug/LoggerInterface";
 import { Feature, Leaves, Plugins } from "@src/Enum";
-import { SearchPluginView, SearchDOM, TFile, WorkspaceLeafExt } from "obsidian";
+import { SearchPluginView, SearchDOM, WorkspaceLeafExt } from "obsidian";
 import SearchFeature from "@src/Feature/Search/SearchFeature";
 import { ResolverInterface } from "@src/Resolver/Interfaces";
 import FeatureService from "../../../../src/Feature/FeatureService";
@@ -10,9 +10,12 @@ import SearchDomWrapperService from "../../../../src/Utils/SearchDomWrapperServi
 import EventDispatcherInterface from "@src/Components/EventDispatcher/Interfaces/EventDispatcherInterface";
 import { AppEvents } from "@src/Types";
 
+// What mock<T>() accepts as its implementation: a deep partial of T.
+type Input<T> = Parameters<typeof mock<T>>[0];
+
 const addResult = jest.fn();
 const mockDom = mock<SearchDOM>({ addResult }, { deep: true });
-const mockView = mock<SearchPluginView>({ dom: mockDom as any });
+const mockView = mock<SearchPluginView>({ dom: mockDom as unknown as Input<SearchDOM> });
 const mockFacade = mock<ObsidianFacade>();
 const mockResolver = mock<ResolverInterface>();
 const mockFactory = mock<FeatureService>();

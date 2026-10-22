@@ -4,17 +4,15 @@ export type Changed<T> = { [K in keyof T]?: T[K] extends object ? Changed<T[K]> 
 export default class ObjectHelper {
     public static compare<T extends obj>(old: T = {} as T, actual: T = {} as T): Changed<T> {
         const changed: obj = {};
-        const keys = [...Object.keys(old), ...Object.keys(actual)].filter((e, i, s) => s.indexOf(e) === i);
-        for (const k of keys) {
+        for (const k of [...Object.keys(old), ...Object.keys(actual)].filter((e, i, s) => s.indexOf(e) === i)) {
             const first = old[k];
             const second = actual[k];
-            const type = typeof (first !== undefined ? first : second);
-            const thereIsNull = first === null || second === null;
-            if (type === "object" && !thereIsNull) {
+            if (typeof (first !== undefined ? first : second) === "object" && first !== null && second !== null) {
                 if (Array.isArray(first)) {
-                    const hasDiff = first.some(x => !(second as unknown[]).includes(x));
-                    const isChanged = hasDiff ? true : (second as unknown[]).some(x => !first.includes(x));
-                    if (isChanged) {
+                    if (
+                        first.some(x => !(second as unknown[]).includes(x)) ||
+                        (second as unknown[]).some(x => !first.includes(x))
+                    ) {
                         changed[k] = true;
                     }
                 } else {
@@ -38,15 +36,13 @@ export default class ObjectHelper {
             if (fv === undefined) {
                 continue;
             }
-            const type = typeof v;
-            if (type === "object" && !Array.isArray(fv) && v !== null) {
+            if (typeof v === "object" && !Array.isArray(fv) && v !== null) {
                 if (fv !== null) {
                     ObjectHelper.fillFrom(v as obj, fv as obj);
                 }
                 continue;
             }
-            //@ts-ignore
-            to[k] = fv;
+            (to as obj)[k] = fv;
         }
         return to;
     }

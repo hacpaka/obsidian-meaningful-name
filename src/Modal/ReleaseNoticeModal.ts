@@ -13,7 +13,10 @@ const ISSUES_URL = "https://github.com/hacpaka/obsidian-meaningful-name/issues";
 export default class ReleaseNoticeModal extends Modal {
     private readonly component = new Component();
 
-    constructor(app: App, private version: string) {
+    constructor(
+        app: App,
+        private version: string
+    ) {
         super(app);
     }
 
@@ -21,12 +24,14 @@ export default class ReleaseNoticeModal extends Modal {
         const { contentEl, titleEl } = this;
         titleEl.setText(`What's new in Meaningful Name ${this.version}`);
 
-        const whatsNew = typeof PLUGIN_WHATS_NEW === "string" ? PLUGIN_WHATS_NEW.trim() : "";
         this.component.load();
-        const body = contentEl.createDiv();
-        MarkdownRenderer.render(this.app, whatsNew || `Updated to ${this.version}.`, body, "", this.component).catch(
-            console.error
-        );
+        MarkdownRenderer.render(
+            this.app,
+            (typeof PLUGIN_WHATS_NEW === "string" ? PLUGIN_WHATS_NEW.trim() : "") || `Updated to ${this.version}.`,
+            contentEl.createDiv(),
+            "",
+            this.component
+        ).catch(console.error);
 
         contentEl.createEl("hr");
         contentEl.createEl("p", {
@@ -37,10 +42,10 @@ export default class ReleaseNoticeModal extends Modal {
         });
 
         const buttons = contentEl.createDiv({ cls: "modal-button-container" });
-        const issues = buttons.createEl("button", { text: "Open an issue on GitHub", cls: "mod-cta" });
-        issues.addEventListener("click", () => window.open(ISSUES_URL));
-        const close = buttons.createEl("button", { text: "Close" });
-        close.addEventListener("click", () => this.close());
+        buttons
+            .createEl("button", { text: "Open an issue on GitHub", cls: "mod-cta" })
+            .addEventListener("click", () => window.open(ISSUES_URL));
+        buttons.createEl("button", { text: "Close" }).addEventListener("click", () => this.close());
     }
 
     onClose(): void {

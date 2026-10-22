@@ -85,8 +85,7 @@ export class CanvasManager extends AbstractManager {
         const promises = [];
         this.logger.log(`inner update "${path}"`);
 
-        const canvasViews = this.facade.getViewsOfType<CanvasViewExt>(Leaves.CV);
-        for (const view of canvasViews) {
+        for (const view of this.facade.getViewsOfType<CanvasViewExt>(Leaves.CV)) {
             if (!view.file) {
                 continue;
             }
@@ -143,25 +142,25 @@ export class CanvasManager extends AbstractManager {
 
         const ids = this.makeFakeElementIds(view.file.path, node.filePath);
 
-        const label = this.fakeTitleElementService.getOrCreate({
-            original: node.labelEl,
-            title,
-            id: ids.label,
-            events: ["hover"],
-        });
-
-        if (label?.created) {
+        if (
+            this.fakeTitleElementService.getOrCreate({
+                original: node.labelEl,
+                title,
+                id: ids.label,
+                events: ["hover"],
+            })?.created
+        ) {
             this.fakeTitleElementService.setVisible(ids.label, true);
         }
 
-        const inlineTitleEl = node.contentEl?.querySelector<HTMLElement>(".inline-title");
-        const inline = this.fakeTitleElementService.getOrCreate({
-            original: inlineTitleEl,
-            title,
-            id: ids.inline,
-            events: ["click"],
-        });
-        if (inline?.created) {
+        if (
+            this.fakeTitleElementService.getOrCreate({
+                original: node.contentEl?.querySelector<HTMLElement>(".inline-title"),
+                title,
+                id: ids.inline,
+                events: ["click"],
+            })?.created
+        ) {
             this.fakeTitleElementService.setVisible(ids.inline, true);
         }
         if (node.placeholderEl.getText() !== title) {

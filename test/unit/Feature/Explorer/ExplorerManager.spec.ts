@@ -1,5 +1,5 @@
-import { mock, mockDeep, mockReset } from "jest-mock-extended";
-import { TFile, TFileExplorerItem, TFileExplorerLeaf, TFileExplorerView, WorkspaceLeafExt } from "obsidian";
+import { mock, mockDeep, mockReset, MockProxy } from "jest-mock-extended";
+import { TFile, TFileExplorerItem, TFileExplorerLeaf, TFileExplorerView } from "obsidian";
 import ObsidianFacade from "@src/Obsidian/ObsidianFacade";
 import { ExplorerFileItemMutator } from "@src/Feature/Explorer/ExplorerFileItemMutator";
 import ExplorerManager from "../../../../src/Feature/Explorer/ExplorerManager";
@@ -10,6 +10,13 @@ import EventDispatcherInterface from "@src/Components/EventDispatcher/Interfaces
 import { AppEvents } from "@src/Types";
 import LoggerInterface from "@src/Components/Debug/LoggerInterface";
 import { Plugins } from "@src/Enum";
+
+// What mock<T>() accepts as its implementation: a deep partial of T.
+type Input<T> = Parameters<typeof mock<T>>[0];
+
+// An explorer leaf whose view is the given mock.
+const leafOf = (view: TFileExplorerView): MockProxy<TFileExplorerLeaf> & TFileExplorerLeaf =>
+    mock<TFileExplorerLeaf>({ view } as unknown as Input<TFileExplorerLeaf>);
 
 // Mock dependencies
 const facadeMock = mock<ObsidianFacade>();
@@ -42,7 +49,7 @@ describe("ExplorerManager", () => {
     });
 
     it("should start the explorer feature", () => {
-        const leafMock = mock<TFileExplorerLeaf>({ view: mock<TFileExplorerView>() as any });
+        const leafMock = leafOf(mock<TFileExplorerView>());
         leafMock.isVisible.mockReturnValue(true);
         facadeMock.getLeavesOfType.mockReturnValue([leafMock]);
         explorerManager.enable();
@@ -53,8 +60,8 @@ describe("ExplorerManager", () => {
 
     it("should throw an error if multiple explorer views are found", () => {
         facadeMock.getLeavesOfType.mockReturnValue([
-            mock<TFileExplorerLeaf>({ view: mockDeep<TFileExplorerView>() as any }),
-            mock<TFileExplorerLeaf>({ view: mockDeep<TFileExplorerView>() as any }),
+            leafOf(mockDeep<TFileExplorerView>()),
+            leafOf(mockDeep<TFileExplorerView>()),
         ]);
 
         expect(() => {
@@ -64,7 +71,7 @@ describe("ExplorerManager", () => {
 
     it("should stop the explorer feature", () => {
         const explorerViewMock = mockDeep<TFileExplorerView>();
-        const explorerLeafMock = mock<TFileExplorerLeaf>({ view: explorerViewMock as any });
+        const explorerLeafMock = leafOf(explorerViewMock);
         explorerLeafMock.isVisible.mockReturnValue(true);
         facadeMock.getLeavesOfType.mockReturnValue([explorerLeafMock]);
 
@@ -77,7 +84,7 @@ describe("ExplorerManager", () => {
 
     it("doRefresh should update titles of all file items", async () => {
         const explorerViewMock = mock<TFileExplorerView>();
-        const explorerLeafMock = mock<TFileExplorerLeaf>({ view: explorerViewMock as any });
+        const explorerLeafMock = leafOf(explorerViewMock);
         explorerLeafMock.isVisible.mockReturnValue(true);
         const fileItemMock = mock<TFileExplorerItem>();
         fileItemMock.file = new TFile();
@@ -94,7 +101,7 @@ describe("ExplorerManager", () => {
 
     it("doUpdate should update the title of a specific file item", async () => {
         const explorerViewMock = mock<TFileExplorerView>();
-        const explorerLeafMock = mock<TFileExplorerLeaf>({ view: explorerViewMock as any });
+        const explorerLeafMock = leafOf(explorerViewMock);
         explorerLeafMock.isVisible.mockReturnValue(true);
         const file = new TFile();
         const fileItemMOck = mock<TFileExplorerItem>();
@@ -116,7 +123,7 @@ describe("ExplorerManager", () => {
     });
 
     it("doUpdate should handle an undefined file item", async () => {
-        const explorerLeafMock = mock<TFileExplorerLeaf>({ view: mock<TFileExplorerView>({ fileItems: {} }) as any });
+        const explorerLeafMock = leafOf(mock<TFileExplorerView>({ fileItems: {} }));
         const path = "test/path";
         facadeMock.getLeavesOfType.mockReturnValue([explorerLeafMock]);
         explorerLeafMock.isVisible.mockReturnValue(false);
@@ -151,7 +158,7 @@ describe("ExplorerManager", () => {
         const explorerViewMock = mock<TFileExplorerView>();
         explorerViewMock.fileItems = { path: fileItemMock };
         const explorerLeafMock = mock<TFileExplorerLeaf>();
-        explorerLeafMock.view = explorerViewMock as any;
+        explorerLeafMock.view = explorerViewMock;
         const mutatorMock = mock<ExplorerFileItemMutator>();
 
         explorerLeafMock.isVisible.mockReturnValue(true);

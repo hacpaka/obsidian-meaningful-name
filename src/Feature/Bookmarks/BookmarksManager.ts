@@ -73,9 +73,7 @@ export default class BookmarksManager extends AbstractFeature<Feature> {
     }
 
     private tryEnable(subscribeOnActive = false): void {
-        const leaf = this.facade.getLeavesOfType<BookmarksPluginLeaf>(Leaves.Bookmarks)?.[0];
-
-        if (leaf.isVisible()) {
+        if (this.facade.getLeavesOfType<BookmarksPluginLeaf>(Leaves.Bookmarks)?.[0].isVisible()) {
             if (this.state !== State.Enabled && this.initView() && this.subscribe()) {
                 this.setState(State.Enabled);
                 this.requestUpdate();
@@ -142,11 +140,9 @@ export default class BookmarksManager extends AbstractFeature<Feature> {
             return;
         }
         // Flatten groups so files nested inside bookmark groups are handled too (#257).
-        const items = this.collectFileItems(this.view.plugin.items);
-        const itemDoms = this.view.itemDoms;
         const result: { [k: string]: boolean } = {};
-        for (const item of items) {
-            const titleEl = itemDoms.get(item)?.titleEl;
+        for (const item of this.collectFileItems(this.view.plugin.items)) {
+            const titleEl = this.view.itemDoms.get(item)?.titleEl;
             result[item.path] = false;
             if (
                 titleEl &&

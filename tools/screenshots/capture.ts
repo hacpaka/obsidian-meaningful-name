@@ -51,8 +51,11 @@ const reloadFeatures = async () => {
 const setSort = (on: boolean) =>
     browser.executeObsidian(
         ({ app }, id, val) => {
-            const p = (app as unknown as AppInternals).plugins.plugins[id];
-            p?.storage?.get("features")?.get("explorer")?.get("sort")?.set(val);
+            (app as unknown as AppInternals).plugins.plugins[id]?.storage
+                ?.get("features")
+                ?.get("explorer")
+                ?.get("sort")
+                ?.set(val);
         },
         PLUGIN_ID,
         on
@@ -61,7 +64,9 @@ const setSort = (on: boolean) =>
 const openFile = (p: string) =>
     browser.executeObsidian(async ({ app }, file) => {
         const f = app.vault.getFileByPath(file);
-        if (f) await app.workspace.getLeaf(false).openFile(f);
+        if (f) {
+            await app.workspace.getLeaf(false).openFile(f);
+        }
     }, p);
 
 const domHas = async (selector: string, text: string): Promise<boolean> =>
@@ -93,10 +98,14 @@ const highlight = (container: string, itemSel: string, text: string) =>
     browser.execute(
         (cSel: string, iSel: string, t: string) => {
             const c = document.querySelector<HTMLElement>(cSel);
-            if (!c) return;
+            if (!c) {
+                return;
+            }
             const items = Array.from(c.querySelectorAll<HTMLElement>(iSel));
             const target = items.find(e => (e.textContent ?? "").includes(t)) ?? items[0];
-            if (!target) return;
+            if (!target) {
+                return;
+            }
             const cr = c.getBoundingClientRect();
             const tr = target.getBoundingClientRect();
             const pad = 4;
@@ -115,7 +124,9 @@ const highlight = (container: string, itemSel: string, text: string) =>
                 zIndex: "9999",
                 boxSizing: "border-box",
             } as CSSStyleDeclaration);
-            if (getComputedStyle(c).position === "static") c.setCssStyles({ position: "relative" });
+            if (getComputedStyle(c).position === "static") {
+                c.setCssStyles({ position: "relative" });
+            }
             c.setCssStyles({ overflow: "hidden" });
             c.appendChild(ring);
         },
@@ -295,7 +306,6 @@ describe("Meaningful Name — documentation screenshots", function () {
         // original title and appends its own `.view-header-title[data-omn]`, so
         // we shoot the bar and wait on that element for the ON state.
         const HEADER = ".workspace-leaf.mod-active .view-header";
-        const HEADER_TITLE = `${HEADER} .view-header-title[data-omn]`;
 
         await openFile("202208251731.md");
         await openFile("linker.md");
@@ -309,7 +319,7 @@ describe("Meaningful Name — documentation screenshots", function () {
 
         await reloadFeatures();
         await waitForText(TABS, "Hello From Frontmatter");
-        await waitForText(HEADER_TITLE, "Hello From Frontmatter");
+        await waitForText(`${HEADER} .view-header-title[data-omn]`, "Hello From Frontmatter");
         await shotHighlighted(TABS, ".workspace-tab-header-inner-title", "Hello From Frontmatter", "Tab On.png");
         await shotHighlighted(HEADER, ".view-header-title[data-omn]", "Hello From Frontmatter", "Heading On.png");
     });
@@ -364,8 +374,9 @@ describe("Meaningful Name — documentation screenshots", function () {
 
     it("Window Frame (not capturable — logged only)", async function () {
         await reloadFeatures();
-        const title = await browser.execute(() => document.title);
-        process.stdout.write(`[shots] window/document title with features on => ${title}\n`);
+        process.stdout.write(
+            `[shots] window/document title with features on => ${await browser.execute(() => document.title)}\n`
+        );
         // The OS title bar is outside the renderer; no PNG is produced here.
         // Keep the existing WindowFrameOff/On.png in docs/img.
     });

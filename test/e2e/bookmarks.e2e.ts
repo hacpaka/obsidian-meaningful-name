@@ -10,7 +10,7 @@ describe("Meaningful Name — Bookmarks inside a group (#257)", function () {
 
     it("substitutes the title for a file bookmarked inside a group", async function () {
         await browser.pause(4500);
-        await browser.executeObsidian(({ app }) => (app as any).commands.executeCommandById("bookmarks:open"));
+        await browser.executeObsidianCommand("bookmarks:open");
         await browser.waitUntil(async () => (await paneText()).includes("My Group"), {
             timeout: 20000,
             timeoutMsg: "bookmarks pane / group never rendered",
@@ -25,8 +25,12 @@ describe("Meaningful Name — Bookmarks inside a group (#257)", function () {
             async () =>
                 browser.execute(() => {
                     const pane = document.querySelector(".workspace-leaf-content[data-type='bookmarks']");
-                    if (!pane) return false;
-                    if ((pane.textContent ?? "").includes("Hello From Frontmatter")) return true;
+                    if (!pane) {
+                        return false;
+                    }
+                    if ((pane.textContent ?? "").includes("Hello From Frontmatter")) {
+                        return true;
+                    }
                     const group = Array.from(pane.querySelectorAll(".tree-item")).find(e =>
                         (e.querySelector(".tree-item-self")?.textContent ?? "").includes("My Group")
                     );

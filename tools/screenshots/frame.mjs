@@ -64,7 +64,7 @@ async function buildHero() {
     const offFile = path.join(IMG, "Explorer Off.png");
     const onFile = path.join(IMG, ".hero-on.png"); // clean, un-dimmed ON capture
     if (!existsSync(offFile) || !existsSync(onFile)) {
-        console.warn("[frame] hero skipped: Explorer captures not found");
+        process.stderr.write("[frame] hero skipped: Explorer captures not found\n");
         return;
     }
     const off = await sharp(offFile).png().toBuffer();
@@ -76,88 +76,94 @@ async function buildHero() {
     const IPX = 20; // inner padding x
     const IPY = 16; // inner padding y
     const LABEL_H = 26;
-    const colH = Math.max(mo.height, mn.height);
     const contentW = mo.width + GAP + mn.width;
     const cardW = IPX * 2 + contentW;
-    const cardH = BAR + IPY + LABEL_H + colH + IPY;
+    const cardH = BAR + IPY + LABEL_H + Math.max(mo.height, mn.height) + IPY;
 
-    const labels = Buffer.from(
-        `<svg width="${contentW}" height="${LABEL_H}" xmlns="http://www.w3.org/2000/svg">
-            <text x="2" y="18" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="13" font-weight="700" fill="#9aa0aa" letter-spacing="0.6">FILENAME</text>
-            <text x="${mo.width + GAP + 2}" y="18" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="13" font-weight="700" fill="#7c5cff" letter-spacing="0.6">FRONTMATTER TITLE</text>
-         </svg>`
-    );
-
-    const card = await sharp({ create: { width: cardW, height: cardH, channels: 4, background: "#ffffff" } })
-        .composite([
-            { input: titleBar(cardW), top: 0, left: 0 },
-            { input: labels, top: BAR + IPY, left: IPX },
-            { input: off, top: BAR + IPY + LABEL_H, left: IPX },
-            { input: on, top: BAR + IPY + LABEL_H, left: IPX + mo.width + GAP },
-            { input: roundedRect(cardW, cardH, "#ffffff"), blend: "dest-in" },
-        ])
-        .png()
-        .toBuffer();
-
-    const shadow = await sharp(roundedRect(cardW, cardH, "rgba(10,12,20,0.45)")).blur(22).png().toBuffer();
     const W = cardW + PAD * 2;
     const H = cardH + PAD * 2;
 
     await sharp(gradient(W, H))
         .composite([
-            { input: shadow, top: PAD + 14, left: PAD },
-            { input: card, top: PAD, left: PAD },
+            {
+                input: await sharp(roundedRect(cardW, cardH, "rgba(10,12,20,0.45)")).blur(22).png().toBuffer(),
+                top: PAD + 14,
+                left: PAD,
+            },
+            {
+                input: await sharp({ create: { width: cardW, height: cardH, channels: 4, background: "#ffffff" } })
+                    .composite([
+                        { input: titleBar(cardW), top: 0, left: 0 },
+                        {
+                            input: Buffer.from(
+                                `<svg width="${contentW}" height="${LABEL_H}" xmlns="http://www.w3.org/2000/svg">
+            <text x="2" y="18" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="13" font-weight="700" fill="#9aa0aa" letter-spacing="0.6">FILENAME</text>
+            <text x="${mo.width + GAP + 2}" y="18" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="13" font-weight="700" fill="#7c5cff" letter-spacing="0.6">FRONTMATTER TITLE</text>
+         </svg>`
+                            ),
+                            top: BAR + IPY,
+                            left: IPX,
+                        },
+                        { input: off, top: BAR + IPY + LABEL_H, left: IPX },
+                        { input: on, top: BAR + IPY + LABEL_H, left: IPX + mo.width + GAP },
+                        { input: roundedRect(cardW, cardH, "#ffffff"), blend: "dest-in" },
+                    ])
+                    .png()
+                    .toBuffer(),
+                top: PAD,
+                left: PAD,
+            },
         ])
         .png()
         .toFile(path.join(IMG, "hero.png"));
 
     unlinkSync(onFile); // drop the temp clean capture
-    console.log(`[frame] hero.png (${W}x${H})`);
+    process.stdout.write(`[frame] hero.png (${W}x${H})\n`);
 }
 
 async function frame(name) {
     const file = path.join(IMG, name);
     if (!existsSync(file)) {
-        console.warn(`[frame] skip ${name}: not found`);
+        process.stderr.write(`[frame] skip ${name}: not found\n`);
         return;
     }
     const shot = await sharp(file).png().toBuffer();
     const meta = await sharp(shot).metadata();
-    const w = meta.width;
-    const h = meta.height;
-    const cardW = w;
-    const cardH = h + BAR;
-
-    // Window card: white base + title bar + screenshot, clipped to rounded corners.
-    const card = await sharp({ create: { width: cardW, height: cardH, channels: 4, background: "#ffffff" } })
-        .composite([
-            { input: titleBar(cardW), top: 0, left: 0 },
-            { input: shot, top: BAR, left: 0 },
-            { input: roundedRect(cardW, cardH, "#ffffff"), blend: "dest-in" },
-        ])
-        .png()
-        .toBuffer();
-
-    // Soft drop shadow: a blurred dark rounded rect the size of the card.
-    const shadow = await sharp(roundedRect(cardW, cardH, "rgba(10,12,20,0.45)"))
-        .blur(22)
-        .png()
-        .toBuffer();
-
+    const cardW = meta.width;
+    const cardH = meta.height + BAR;
     const W = cardW + PAD * 2;
     const H = cardH + PAD * 2;
 
     await sharp(gradient(W, H))
         .composite([
-            { input: shadow, top: PAD + 14, left: PAD },
-            { input: card, top: PAD, left: PAD },
+            // Soft drop shadow: a blurred dark rounded rect the size of the card.
+            {
+                input: await sharp(roundedRect(cardW, cardH, "rgba(10,12,20,0.45)")).blur(22).png().toBuffer(),
+                top: PAD + 14,
+                left: PAD,
+            },
+            // Window card: white base + title bar + screenshot, clipped to rounded corners.
+            {
+                input: await sharp({ create: { width: cardW, height: cardH, channels: 4, background: "#ffffff" } })
+                    .composite([
+                        { input: titleBar(cardW), top: 0, left: 0 },
+                        { input: shot, top: BAR, left: 0 },
+                        { input: roundedRect(cardW, cardH, "#ffffff"), blend: "dest-in" },
+                    ])
+                    .png()
+                    .toBuffer(),
+                top: PAD,
+                left: PAD,
+            },
         ])
         .png()
         .toFile(file);
 
-    console.log(`[frame] ${name} (${W}x${H})`);
+    process.stdout.write(`[frame] ${name} (${W}x${H})\n`);
 }
 
 await buildHero();
-for (const name of NAMES) await frame(name);
-console.log("[frame] done");
+for (const name of NAMES) {
+    await frame(name);
+}
+process.stdout.write("[frame] done\n");

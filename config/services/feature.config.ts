@@ -52,8 +52,9 @@ export default (container: Container) => {
         .onActivation((c, i) => (name: string) => {
             const feature: FeatureInterface<Feature> = i(name);
             if (feature instanceof AbstractManager) {
-                const service: FeatureService = c.container.get(SI["feature:service"]);
-                feature.setResolver(service.createResolver(feature.getId()));
+                feature.setResolver(
+                    c.container.get<FeatureService>(SI["feature:service"]).createResolver(feature.getId())
+                );
             }
             return feature;
         });
@@ -107,11 +108,10 @@ export default (container: Container) => {
     container
         .bind(SI["feature:config"])
         .toDynamicValue(c => {
-            const feature = c.currentRequest.target.getNamedTag().value as Feature;
             return c.container
                 .get<KeyStorageInterface<SettingsType>>(SI["settings:storage"])
                 .get("features")
-                .get(feature)
+                .get(c.currentRequest.target.getNamedTag().value as Feature)
                 .value();
         })
         .when(() => true);
@@ -123,12 +123,13 @@ export default (container: Container) => {
         );
     container.bind(SI["feature:explorer:sort"]).to(ExplorerSort);
     container.bind(SI["factory:feature:explorer:sort"]).toFunction(() => {
-        const enabled = container
+        return container
             .get<Storage<SettingsType>>(SI["settings:storage"])
             .get("features")
             .get(Feature.Explorer)
             .get("sort")
-            .value();
-        return enabled ? container.get(SI["feature:explorer:sort"]) : null;
+            .value()
+            ? container.get(SI["feature:explorer:sort"])
+            : null;
     });
 };

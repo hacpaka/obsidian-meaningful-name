@@ -7,13 +7,15 @@ describe("Meaningful Name — Backlinks show title (#240)", function () {
     it("shows the linking note's frontmatter title in the backlinks pane", async function () {
         await browser.pause(4500); // feature activation gate
         await browser.executeObsidian(({ app }) => app.workspace.openLinkText("202208251731", "", true));
-        await browser.executeObsidian(({ app }) => (app as any).commands.executeCommandById("backlink:open"));
+        await browser.executeObsidianCommand("backlink:open");
 
         await browser.waitUntil(
             async () => {
                 const titles: string[] = await browser.execute(() => {
                     const pane = document.querySelector(".backlink-pane");
-                    if (!pane) return [];
+                    if (!pane) {
+                        return [];
+                    }
                     return Array.from(pane.querySelectorAll(".tree-item-inner")).map(e => e.textContent ?? "");
                 });
                 return titles.some(t => t.includes("The Linker Note"));
@@ -28,7 +30,7 @@ describe("Meaningful Name — Backlinks show title (#240)", function () {
     it("shows the title under Unlinked mentions (#190, #246)", async function () {
         await browser.pause(4500);
         await browser.executeObsidian(({ app }) => app.workspace.openLinkText("202208251731", "", true));
-        await browser.executeObsidian(({ app }) => (app as any).commands.executeCommandById("backlink:open"));
+        await browser.executeObsidianCommand("backlink:open");
 
         const paneText = async (): Promise<string> =>
             browser.execute(() => document.querySelector(".backlink-pane")?.textContent ?? "");

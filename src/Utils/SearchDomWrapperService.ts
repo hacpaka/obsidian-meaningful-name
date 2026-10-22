@@ -22,8 +22,7 @@ export default class SearchDomWrapperService {
         }
         const tagged = this.entities.get(tag);
         if (!tagged.has(dom)) {
-            const wrapper = new ResultDomWrapper(resolver, dom);
-            tagged.set(dom, wrapper);
+            tagged.set(dom, new ResultDomWrapper(resolver, dom));
             this.logger.log(`Entity created`);
             this.runTimer();
         }

@@ -1,7 +1,7 @@
 import { mock } from "jest-mock-extended";
 import ObsidianFacade from "@src/Obsidian/ObsidianFacade";
 import FileNoteLinkService from "@src/Utils/FileNoteLinkService";
-import { LinkCache, TFile } from "obsidian";
+import { LinkCache } from "obsidian";
 
 const mockFacade = mock<ObsidianFacade>();
 

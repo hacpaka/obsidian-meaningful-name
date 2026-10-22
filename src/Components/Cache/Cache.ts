@@ -21,8 +21,7 @@ export default class Cache implements CacheInterface {
 
     getItem<T>(key: string): CacheItemInterface<T> {
         const isHit = this.pool.has(key) || this.serialized.has(key);
-        const value = isHit ? this.resolve<T>(key) : null;
-        return new CacheItem<T>(isHit, value, key);
+        return new CacheItem<T>(isHit, isHit ? this.resolve<T>(key) : null, key);
     }
 
     save<T>(item: CacheItemInterface<T>): void {

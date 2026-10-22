@@ -17,11 +17,9 @@ export default tseslint.config(
         },
         rules: {
             quotes: "off",
-            "@typescript-eslint/ban-ts-comment": "off",
-            "@typescript-eslint/no-this-alias": "off",
-            // Project idioms that the pre-upgrade config did not flag:
-            "@typescript-eslint/no-unsafe-function-type": "off",
-            "@typescript-eslint/no-unused-expressions": "off", // short-circuit calls: `cond && this.doX()`
+            // Kai's canons: every control-flow block in braces, K&R style.
+            curly: ["error", "all"],
+            "brace-style": ["error", "1tbs"],
             "@typescript-eslint/no-unused-vars": [
                 "error",
                 { argsIgnorePattern: "^_", varsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" },

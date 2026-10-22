@@ -64,7 +64,7 @@ describe("Resolver Sync Test", () => {
         test("Should return modified value by event", () => {
             dispatcher.dispatch.mockImplementationOnce((name, event) => {
                 if (name === "resolver:resolved") {
-                    //@ts-expect-error
+                    // @ts-expect-error modify is not part of the typed event value
                     event.get().modify("bar");
                     return;
                 }

@@ -8,8 +8,8 @@ describe("Meta Placeholder Test", () => {
     const path = "/path/to/file.md";
     const extractor = mock<ExtractorInterface>();
     extractor.extract.mockReturnValue(expected);
-    const meta: { [k: string]: any } = {};
-    const metaFactory = jest.fn((path: string, type: string) => meta);
+    const meta: { [k: string]: unknown } = {};
+    const metaFactory = jest.fn((_path: string, _type: string) => meta);
     const metaPlaceholder = new MetaPlaceholder(extractor, metaFactory);
 
     test("Set and get placeholder", () => {

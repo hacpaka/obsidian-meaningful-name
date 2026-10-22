@@ -7,14 +7,17 @@ import Event from "@src/Components/EventDispatcher/Event";
 import { ProcessorTypes } from "@src/Components/Processor/ProcessorUtils";
 
 export class Migrator {
-    constructor(private config: SettingsType, private dispatcher: EventDispatcherInterface<AppEvents>) {}
+    constructor(
+        private config: SettingsType,
+        private dispatcher: EventDispatcherInterface<AppEvents>
+    ) {}
 
     public migrate(version: string): SettingsType {
         if (this.config.version === version) {
             return this.config;
         }
         const currentVersion = this.config.version;
-        const versions = Object.getOwnPropertyNames(Object.getPrototypeOf(this))
+        for (const version of Object.getOwnPropertyNames(Object.getPrototypeOf(this))
             .filter(e => e.startsWith("v"))
             .map(e => e.replace("v", "").replaceAll("_", "."))
             .filter(e => PluginHelper.compareVersion(e, ">", currentVersion))
@@ -25,25 +28,19 @@ export class Migrator {
                     return 1;
                 }
                 return 0;
-            });
-        for (const version of versions) {
-            const method = "v" + version.replaceAll(".", "_");
-            (this as unknown as Record<string, () => void>)[method]();
+            })) {
+            (this as unknown as Record<string, () => void>)["v" + version.replaceAll(".", "_")]();
         }
         this.dispatcher.dispatch("migrator:migrated", new Event({ from: currentVersion, to: version }));
         return this.config;
     }
 
     private v3_8_0(): void {
-        const features = Object.values(Feature);
-        //@ts-ignore
-        delete this.config.features["explorer:sort"];
+        delete (this.config.features as unknown as Record<string, unknown>)["explorer:sort"];
         for (const [k, v] of Object.entries(this.config.templates)) {
-            // @ts-ignore
-            if (features.contains(k)) {
+            if ((Object.values(Feature) as string[]).contains(k)) {
                 this.config.features[k as Feature].templates = v;
-                // @ts-ignore
-                delete this.config.templates[k];
+                delete (this.config.templates as Record<string, unknown>)[k];
             }
         }
         return;
@@ -72,10 +69,10 @@ export class Migrator {
     }
 
     private v3_9_0(): void {
-        // @ts-ignore
-        if (this.config.features.starred) {
-            // @ts-ignore
-            delete this.config.features.starred;
+        // "starred" was a feature before 3.9.0.
+        const features = this.config.features as unknown as Record<string, unknown>;
+        if (features.starred) {
+            delete features.starred;
         }
     }
 }

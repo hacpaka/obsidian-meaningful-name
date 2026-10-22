@@ -28,8 +28,6 @@ const feature = new AliasFeature(
     mockConfig
 );
 const fooPath = "path/to/foo.md";
-const barPath = "path/to/bar.md";
-const quotePath = "path/to/quote.md";
 
 describe("Test ID", () => {
     expect(feature.getId()).toEqual(Feature.Alias);

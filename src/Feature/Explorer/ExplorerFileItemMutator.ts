@@ -25,7 +25,9 @@ export class ExplorerFileItemMutator {
     private updateTitle(): void {
         this.getProto().updateTitle.call(this.item);
         const title = this.resolver.resolve(this.item.file.path);
-        title?.length > 0 && this.item.innerEl.setText(title);
+        if (title?.length > 0) {
+            this.item.innerEl.setText(title);
+        }
     }
 
     private startRename(): void {

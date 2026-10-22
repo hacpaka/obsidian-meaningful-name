@@ -9,8 +9,8 @@ const ROOT = ["202208251731.md", "node-a.md", "node-z.md"];
 
 describe("Meaningful Name — Explorer time sort not broken (#262)", function () {
     it("byModifiedTime orders files by mtime, not by name, with the plugin enabled", async function () {
-        await browser.executeObsidian(({ app }) => (app as any).commands.executeCommandById("file-explorer:open"));
-        await $(".nav-files-container").then(el => el.waitForExist({ timeout: 20000 }));
+        await browser.executeObsidianCommand("file-explorer:open");
+        await $(".nav-files-container").waitForExist({ timeout: 20000 });
         // Wait past the plugin's ~3s feature-activation gate.
         await browser.pause(4500);
 
@@ -18,16 +18,24 @@ describe("Meaningful Name — Explorer time sort not broken (#262)", function ()
         // from name/title order — makes the assertion discriminating.
         for (const path of ["202208251731.md", "node-z.md", "node-a.md"]) {
             await browser.executeObsidian(async ({ app }, p) => {
-                const f = (app.vault as any).getAbstractFileByPath(p);
-                await app.vault.append(f, "\n");
+                await app.vault.append(app.vault.getFileByPath(p), "\n");
             }, path);
             await browser.pause(300);
         }
 
         // Switch the explorer to modified-time sort and re-sort.
         await browser.executeObsidian(({ app }) => {
-            const view: any = app.workspace.getLeavesOfType("file-explorer")[0]?.view;
-            view.setSortOrder ? view.setSortOrder("byModifiedTime") : (view.sortOrder = "byModifiedTime");
+            // The explorer's sort API is internal.
+            const view = app.workspace.getLeavesOfType("file-explorer")[0]?.view as unknown as {
+                setSortOrder?: (order: string) => void;
+                sortOrder: string;
+                requestSort(): void;
+            };
+            if (view.setSortOrder) {
+                view.setSortOrder("byModifiedTime");
+            } else {
+                view.sortOrder = "byModifiedTime";
+            }
             view.requestSort();
         });
         await browser.pause(2000);
@@ -42,8 +50,7 @@ describe("Meaningful Name — Explorer time sort not broken (#262)", function ()
         const mtimes: Record<string, number> = await browser.executeObsidian(({ app }, root) => {
             const out: Record<string, number> = {};
             for (const p of root) {
-                const f = (app.vault as any).getAbstractFileByPath(p);
-                out[p] = f?.stat?.mtime ?? 0;
+                out[p] = app.vault.getFileByPath(p)?.stat?.mtime ?? 0;
             }
             return out;
         }, ROOT);

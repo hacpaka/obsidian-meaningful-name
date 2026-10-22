@@ -68,8 +68,7 @@ export default class TabManager extends AbstractManager {
     }
 
     protected async doUpdate(path: string): Promise<boolean> {
-        const result = await this.innerUpdate(path);
-        return result[path] === true;
+        return (await this.innerUpdate(path))[path] === true;
     }
 
     private initReplacer(): void {
@@ -99,15 +98,14 @@ export default class TabManager extends AbstractManager {
             function (self, _args, vanilla) {
                 const filePath =
                     this?.view?.file?.path ?? ((this?.view?.getState?.() ?? {}).file as string | undefined) ?? null;
-                return filePath ? self.resolver.resolve(filePath) ?? vanilla.call(this) : vanilla.call(this);
+                return filePath ? (self.resolver.resolve(filePath) ?? vanilla.call(this)) : vanilla.call(this);
             }
         );
         this.replacerDisplayText?.enable();
     }
 
     private reset() {
-        const leaves = this.facade.getLeavesOfType<MarkdownLeaf>("markdown");
-        for (const leaf of leaves) {
+        for (const leaf of this.facade.getLeavesOfType<MarkdownLeaf>("markdown")) {
             const file = leaf.view?.file;
             if (file && leaf.tabHeaderInnerTitleEl) {
                 leaf.tabHeaderInnerTitleEl.setText(file.basename);
@@ -116,9 +114,8 @@ export default class TabManager extends AbstractManager {
     }
 
     private async innerUpdate(path: string = null): Promise<{ [k: string]: boolean }> {
-        const leaves = this.facade.getLeavesOfType<MarkdownLeaf>("markdown");
         const result: { [k: string]: boolean } = {};
-        for (const leaf of leaves) {
+        for (const leaf of this.facade.getLeavesOfType<MarkdownLeaf>("markdown")) {
             const filePath = leaf.view?.getState()?.file as string;
             if (!filePath || (path && path !== filePath)) {
                 continue;

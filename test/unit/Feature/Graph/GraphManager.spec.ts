@@ -20,7 +20,8 @@ Array.prototype.first = function () {
 
 const mockFactory = jest.fn();
 const mockDispatcher = mock<EventDispatcherInterface<AppEvents>>();
-const mockFacade = mock<ObsidianFacade>({ getViewsOfType: jest.fn((): any[] => []) });
+const mockFacade = mock<ObsidianFacade>();
+mockFacade.getViewsOfType.mockReturnValue([]);
 const mockResolver = mock<ResolverInterface>();
 
 test(`Should return ${Feature.Graph} as Id`, () => {
@@ -33,13 +34,13 @@ test(`Should return ${Feature.Graph} as Id`, () => {
 describe("Flow is case the graph is not opened yet", () => {
     const manager = new GraphManager(mockDispatcher, mockFacade, mockFactory, mock<LoggerInterface>());
     manager.setResolver(mockResolver);
-    const mockReplacer = mock<FunctionReplacer<any, any, any>>();
+    const mockReplacer = mock<FunctionReplacer<GraphNode, "getDisplayText", GraphManager>>();
 
     let callback: Callback<AppEvents["layout:change"]> = null;
-    let ref: ListenerRef<any> = null;
+    let ref: ListenerRef<keyof AppEvents> = null;
     const getText = {
         original: jest.fn(() => "original"),
-        stub: (args: unknown, defaultArgs: unknown, vanilla: unknown) => "",
+        stub: (_args: unknown, _defaultArgs: unknown, _vanilla: unknown) => "",
     };
 
     beforeAll(() => {
@@ -120,7 +121,7 @@ describe("Flow is case the graph is not opened yet", () => {
 describe("Flow in case graph is opened already", () => {
     const manager = new GraphManager(mockDispatcher, mockFacade, mockFactory, mock<LoggerInterface>());
     manager.setResolver(mockResolver);
-    const mockReplacer = mock<FunctionReplacer<any, any, any>>();
+    const mockReplacer = mock<FunctionReplacer<GraphNode, "getDisplayText", GraphManager>>();
     const renderer = {
         nodes: [mock<GraphNode>()],
         onIframeLoad: jest.fn(),

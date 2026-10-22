@@ -55,8 +55,7 @@ export default class ResolverCachedProxy implements ResolverDynamicInterface {
     }
 
     private actualize(item: CacheItemInterface<string | null>): void {
-        const title = this.resolver.resolve(item.getKey());
-        this.cache.save(item.set(title));
+        this.cache.save(item.set(this.resolver.resolve(item.getKey())));
     }
 
     private get(path: string): string | null {

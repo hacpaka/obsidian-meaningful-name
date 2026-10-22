@@ -13,8 +13,7 @@ export default new ContainerModule(bind => {
         const storage = c.container.get<Storage<SettingsType>>(SI["settings:storage"]);
 
         const [name, type]: [Feature, keyof TemplateValue] = value.split(":") as [Feature, keyof TemplateValue];
-        const targetTemplates = storage.get("features").get(name)?.get("templates");
-        const template = targetTemplates?.get(type)?.value();
+        const template = storage.get("features").get(name)?.get("templates")?.get(type)?.value();
         return template ? template : storage.get("templates").get("common").get(type).value();
     });
 

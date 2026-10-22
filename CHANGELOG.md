@@ -9,6 +9,17 @@ At release time, rename `## Unreleased` to the version being released.
 Meaningful Name starts at 1.0.0. The 4.x and older sections are releases of the original
 [Front Matter Title](https://github.com/snezhig/obsidian-front-matter-title), kept for history.
 
+## 1.0.5
+
+### Changed
+- Every release now comes with a build provenance attestation: a signed record that `main.js`, `manifest.json`
+  and `styles.css` were built from this repository by its release workflow. You can check it with
+  `gh attestation verify main.js --repo hacpaka/obsidian-meaningful-name`.
+
+### Under the hood
+- The code follows the project's standards throughout: every block in braces, no single-use variables, no
+  TypeScript suppressions, and ESLint now checks the tests and tools too. No change in behaviour.
+
 ## 1.0.2
 
 Requires Obsidian 1.13 or newer.

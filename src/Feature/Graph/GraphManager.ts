@@ -90,7 +90,9 @@ export default class GraphManager extends AbstractManager {
         this.ref = this.dispatcher.addListener({
             name: "layout:change",
             cb: () => {
-                this.initReplacement() && this.unbind();
+                if (this.initReplacement()) {
+                    this.unbind();
+                }
             },
         });
     }
@@ -103,8 +105,7 @@ export default class GraphManager extends AbstractManager {
                 "getDisplayText",
                 this,
                 function (self, defaultArgs, vanilla) {
-                    const text = self.resolver.resolve(this.id);
-                    return text ?? vanilla.call(this, ...defaultArgs);
+                    return self.resolver.resolve(this.id) ?? vanilla.call(this, ...defaultArgs);
                 }
             );
             if (!this.replacement) {

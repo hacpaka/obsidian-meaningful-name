@@ -10,16 +10,20 @@ describe("Meaningful Name — Quick Switcher / Suggest (#268)", function () {
             async () => {
                 // (Re)open the switcher and type a path-like query each poll, until
                 // the Suggest feature has activated and substitutes the title.
-                await browser.executeObsidian(({ app }) => (app as any).commands.executeCommandById("switcher:open"));
+                await browser.executeObsidianCommand("switcher:open");
                 const input = await browser.$(".prompt-input");
-                if (!(await input.isExisting())) return false;
+                if (!(await input.isExisting())) {
+                    return false;
+                }
                 await input.click();
                 await browser.keys([..."folder/sub"]);
 
                 const texts: string[] = await browser.execute(() =>
                     Array.from(document.querySelectorAll(".suggestion-item")).map(e => e.textContent ?? "")
                 );
-                if (texts.some(t => t.includes("Sub Note Title"))) return true;
+                if (texts.some(t => t.includes("Sub Note Title"))) {
+                    return true;
+                }
                 // not yet — close the switcher and let the poll retry
                 await browser.keys(["Escape"]);
                 return false;

@@ -5,11 +5,13 @@ import FunctionReplacer from "./FunctionReplacer";
 export default class ResultDomWrapper {
     private replacer: FunctionReplacer<SearchDOM, "addResult", ResultDomWrapper> = null;
 
-    constructor(private resolver: ResolverInterface = null, dom: SearchDOM) {
+    constructor(
+        private resolver: ResolverInterface = null,
+        dom: SearchDOM
+    ) {
         this.replacer = FunctionReplacer.tryCreate(dom, "addResult", this, (self, defaultArgs, vanilla) => {
             const c = vanilla.call(dom, ...defaultArgs) as { containerEl: HTMLElement };
-            const file = defaultArgs[0];
-            self.processLookupItem(file, c);
+            self.processLookupItem(defaultArgs[0], c);
             return c;
         });
         if (!this.replacer) {
@@ -25,14 +27,13 @@ export default class ResultDomWrapper {
     }
 
     private process(): void {
-        const lookup = this.replacer?.getTarget()?.resultDomLookup ?? new Map<TFile, { containerEl: HTMLElement }>();
-        for (const [file, item] of lookup) {
+        for (const [file, item] of this.replacer?.getTarget()?.resultDomLookup ??
+            new Map<TFile, { containerEl: HTMLElement }>()) {
             this.processLookupItem(file, item);
         }
     }
 
     private processLookupItem(file: TFile, item: { containerEl: HTMLElement }): void {
-        const restore = !this?.replacer?.isEnabled();
         if (file.extension !== "md") {
             return;
         }
@@ -40,7 +41,7 @@ export default class ResultDomWrapper {
         if (!node) {
             return;
         }
-        const text = (restore ? null : this.resolver.resolve(file.path)) ?? file.basename;
+        const text = (this?.replacer?.isEnabled() ? this.resolver.resolve(file.path) : null) ?? file.basename;
         if (node.getText() !== text) {
             node.setText(text);
         }

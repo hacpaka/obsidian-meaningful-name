@@ -1,4 +1,4 @@
-import {  ContainerModule } from "inversify";
+import { ContainerModule } from "inversify";
 import Api from "../../src/Components/ApiAdapter/Api";
 import Defer from "../../src/Components/ApiAdapter/Defer";
 import SI from "../inversify.types";

@@ -17,7 +17,9 @@ function changelogSection(version: string): string {
             capture = line.slice(3).trim() === version;
             continue;
         }
-        if (capture) out.push(line);
+        if (capture) {
+            out.push(line);
+        }
     }
     return out.join("\n").trim();
 }
@@ -29,7 +31,7 @@ describe("Meaningful Name — update notice modal", function () {
     async function modalText(): Promise<string> {
         return browser.execute(() => {
             const m = document.querySelector(".modal-container .modal");
-            return m ? m.textContent ?? "" : "";
+            return m ? (m.textContent ?? "") : "";
         });
     }
 

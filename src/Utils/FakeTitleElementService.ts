@@ -20,9 +20,8 @@ export default class FakeTitleElementService {
     };
 
     removeExcept(id: string | string[]) {
-        const ids = Array.isArray(id) ? id : [id];
         for (const key of Array.from(this.elements.keys())) {
-            if (!ids.includes(key)) {
+            if (!(Array.isArray(id) ? id : [id]).includes(key)) {
                 // Go through remove() so the original title is made visible again.
                 // Dropping the fake on its own leaves the original hidden and the
                 // note ends up with no title at all (#285).
@@ -102,8 +101,13 @@ export default class FakeTitleElementService {
     public setVisible(id: string, visible: boolean): this {
         if (this.elements.has(id)) {
             const { fake, original } = this.elements.get(id);
-            visible ? this.hide(original) : this.show(original);
-            visible ? this.show(fake) : this.hide(fake);
+            if (visible) {
+                this.hide(original);
+                this.show(fake);
+            } else {
+                this.show(original);
+                this.hide(fake);
+            }
         }
         return this;
     }
@@ -156,8 +160,7 @@ export default class FakeTitleElementService {
 
     private find(container: HTMLElement, id: string): HTMLElement | null {
         for (const node of Array.from(container.children)) {
-            const cId = node.getAttribute(this.attr.fake);
-            if (id === cId && node.instanceOf(HTMLElement)) {
+            if (id === node.getAttribute(this.attr.fake) && node.instanceOf(HTMLElement)) {
                 return node;
             }
         }

@@ -69,10 +69,9 @@ export class InlineTitleManager extends AbstractManager {
     }
 
     private async innerUpdate(path: string = null): Promise<boolean> {
-        const views = this.facade.getViewsOfType<MarkdownViewExt>(Leaves.MD);
         const promises = [];
         const ids: string[] = [];
-        for (const view of views) {
+        for (const view of this.facade.getViewsOfType<MarkdownViewExt>(Leaves.MD)) {
             if (view.file && (!path || view.file.path === path)) {
                 promises.push(
                     this.resolve(view.file.path)

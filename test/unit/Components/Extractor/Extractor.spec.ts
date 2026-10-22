@@ -38,7 +38,7 @@ describe("Extractor Test", () => {
     describe(`Throws ${PathNotFoundException.name}`, () => {
         const data = [
             { path: "path", obj: {} },
-            { path: "path.obj", obj: { path: undefined as any } },
+            { path: "path.obj", obj: { path: undefined as unknown } },
         ];
         for (const item of data) {
             test(`Path ${item.path} will be not found in ${JSON.stringify(item.obj)}`, () => {
@@ -82,7 +82,7 @@ describe("Extractor Test", () => {
 
         for (const item of data) {
             test(`Extract ${item.expected} by ${item.path} from {${JSON.stringify(item.obj)}`, () => {
-                /**@ts-ignore*/
+                // @ts-expect-error the strategy name indexes a test-only map
                 const strategy = strategies[item.strategy];
                 strategy.support.mockReturnValue(true);
                 strategy.process.mockReturnValue(item.expected + "-s");

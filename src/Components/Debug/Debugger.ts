@@ -3,7 +3,10 @@ import { injectable } from "inversify";
 
 @injectable()
 export default class Debugger implements LoggerInterface {
-    constructor(private name: string, private enabled: () => boolean) {}
+    constructor(
+        private name: string,
+        private enabled: () => boolean
+    ) {}
 
     info(...value: unknown[]): void {
         this.log(...value);

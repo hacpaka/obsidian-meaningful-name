@@ -23,10 +23,9 @@ export default class ManagerComposer {
     ) {}
 
     public async update(path: string, id: Feature = null): Promise<{ [K in Feature]?: boolean }> {
-        const ids = id ? [id] : this.ids;
         const result: { [K in Feature]?: boolean } = {};
         const promises = [];
-        for (const i of ids) {
+        for (const i of id ? [id] : this.ids) {
             const manager = this.features.get<AbstractManager>(i);
             if (manager) {
                 this.logger.log(`Run update for [${path}] on [${manager.getId()}]`);
@@ -44,9 +43,8 @@ export default class ManagerComposer {
 
     public async refresh(id: Feature = null): Promise<void> {
         this.logger.log("refresh");
-        const ids = id ? [id] : this.ids;
         const promises = [];
-        for (const i of ids) {
+        for (const i of id ? [id] : this.ids) {
             const manager = this.features.get<AbstractManager>(i);
             if (manager) {
                 promises.push(

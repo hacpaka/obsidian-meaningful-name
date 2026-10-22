@@ -17,9 +17,7 @@ export default class HeadingPlaceholder extends AbstractPlaceholder {
         const headings = this.factory(path, "headings") ?? [];
         const match = this.placeholder.match(/^#h([1-6])$/);
         if (match) {
-            const level = Number(match[1]);
-            const found = headings.find(h => h.level === level);
-            return found?.heading ?? "";
+            return headings.find(h => h.level === Number(match[1]))?.heading ?? "";
         }
         return headings[0]?.heading ?? "";
     }

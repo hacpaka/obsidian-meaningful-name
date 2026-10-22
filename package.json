@@ -1,6 +1,6 @@
 {
   "name": "obsidian-meaningful-name",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "Shows a readable name from a note's frontmatter in place of its filename.",
   "main": "main.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "shots": "wdio run ./wdio.shots.mts",
     "frame": "node tools/screenshots/frame.mjs",
     "shots:pretty": "npm run shots && npm run frame",
-    "eslint": "eslint src",
+    "eslint": "eslint src config main.ts tools test",
     "pretty": "prettier --write *.ts *.json src test --ignore-path package-lock.json"
   },
   "keywords": [],

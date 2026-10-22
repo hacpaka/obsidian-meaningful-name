@@ -4,7 +4,7 @@ import { TemplateInterface } from "@src/Creator/Interfaces";
 
 describe("Factory Test", () => {
     beforeEach(() => resolver.mockClear);
-    const resolver = jest.fn((named: string): TemplateInterface => mock<TemplateInterface>());
+    const resolver = jest.fn((_named: string): TemplateInterface => mock<TemplateInterface>());
     const data = [
         { template: "foobar", pattern: "{{.*}}", type: "simple" },
         { template: "{{foobar}}", pattern: "{{.*}}", type: "composite" },

@@ -64,8 +64,13 @@ export default class MetaTitlePlugin extends Plugin implements PluginInterface {
     private maybeShowReleaseNotice(): void {
         // Skip the notice for releases without changelog notes (e.g. purely
         // technical/maintenance patches) — there is nothing to announce.
-        const hasNotes = typeof PLUGIN_WHATS_NEW === "string" && PLUGIN_WHATS_NEW.trim().length > 0;
-        if (!PluginHelper.shouldShowReleaseNotice(this.previousVersion, PLUGIN_VERSION, hasNotes)) {
+        if (
+            !PluginHelper.shouldShowReleaseNotice(
+                this.previousVersion,
+                PLUGIN_VERSION,
+                typeof PLUGIN_WHATS_NEW === "string" && PLUGIN_WHATS_NEW.trim().length > 0
+            )
+        ) {
             return;
         }
         new ReleaseNoticeModal(this.app, PLUGIN_VERSION).open();
@@ -81,7 +86,7 @@ export default class MetaTitlePlugin extends Plugin implements PluginInterface {
         const loaded = (await this.loadData()) as Partial<SettingsType> | null;
         // Remember the previously installed version (null on a fresh install) to
         // decide whether to show the "what's new" notice after an update.
-        this.previousVersion = loaded ? loaded.version ?? "0.0.0" : null;
+        this.previousVersion = loaded ? (loaded.version ?? "0.0.0") : null;
         if (loaded && !loaded.version) {
             loaded.version = "0.0.0";
         }
@@ -102,7 +107,6 @@ export default class MetaTitlePlugin extends Plugin implements PluginInterface {
     private async delay(): Promise<void> {
         const delay = this.storage.get("boot").get("delay").value();
         const background = this.storage.get("boot").get("background").value();
-        const debug = this.storage.get("debug").value();
         this.logger.log(`Plugin manual delay ${delay}`);
         let promise: Promise<void> = new Promise(r =>
             window.setTimeout(() => {
@@ -113,7 +117,7 @@ export default class MetaTitlePlugin extends Plugin implements PluginInterface {
                 r();
             }, delay)
         );
-        if (delay > 0 && debug) {
+        if (delay > 0 && this.storage.get("debug").value()) {
             new Notice(`[${this.manifest.name}]\nWill be loaded in ${delay}ms. Background: ${background}`);
             promise = promise.then(() => {
                 new Notice(`[${this.manifest.name}]\nLoaded. Background: ${background}`);
@@ -181,11 +185,10 @@ export default class MetaTitlePlugin extends Plugin implements PluginInterface {
 
     private reloadFeatures(): void {
         this.fc.disableAll();
-        const f = this.storage.get("features");
         const states: [Feature, boolean][] = [];
 
         for (const feature of Object.values(Feature)) {
-            states.push([feature, f.get(feature).get("enabled").value()]);
+            states.push([feature, this.storage.get("features").get(feature).get("enabled").value()]);
         }
 
         for (const [id, state] of states) {

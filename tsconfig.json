@@ -32,6 +32,6 @@
     }
   },
   "include": ["./**/*.ts", "./src", "./config"],
-  "exclude": ["node_modules", "tools"],
+  "exclude": ["node_modules", "tools", "test/e2e"],
   "typescript.tsdk": "node_modules/typescript/lib"
 }

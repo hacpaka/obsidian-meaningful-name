@@ -4,7 +4,7 @@ import { TemplatePlaceholderInterface } from "@src/Creator/Interfaces";
 import AbstractPlaceholder from "../../../../../src/Creator/Template/Placeholders/AbstractPlaceholder";
 
 describe("Factory Test", () => {
-    const resolver = jest.fn((type: string, placeholder: string) => mock<TemplatePlaceholderInterface>());
+    const resolver = jest.fn((_type: string, _placeholder: string) => mock<TemplatePlaceholderInterface>());
     const factory = new Factory(resolver);
     beforeEach(() => resolver.mockClear());
     const data = [
