@@ -30,7 +30,7 @@ export default class WindowFrameFeature implements AbstractFeature<Feature> {
         private dispatcher: EventDispatcherInterface<AppEvents>
     ) {
         this.resolver = featureService.createResolver(this.getId());
-        this.ref = dispatcher.addListener({ name: "metadata:cache:changed", cb: this.onCacheChanged.bind(this) });
+        this.ref = dispatcher.addListener({ name: "metadata:cache:changed", cb: e => this.onCacheChanged(e) });
     }
 
     static getId(): Feature {
@@ -63,8 +63,9 @@ export default class WindowFrameFeature implements AbstractFeature<Feature> {
     }
 
     enable(): void {
-        this.vanillaUpdateTitle = this.facade.getWorkspace().updateTitle;
-        this.facade.getWorkspace().updateTitle = this.updateTitle.bind(this);
+        const workspace = this.facade.getWorkspace();
+        this.vanillaUpdateTitle = workspace.updateTitle.bind(workspace) as () => void;
+        this.facade.getWorkspace().updateTitle = () => this.updateTitle();
         this.facade.getWorkspace().updateTitle();
         this.enabled = true;
     }

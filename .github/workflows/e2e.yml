@@ -24,10 +24,8 @@ jobs:
     # the t64 transition (libasound2 -> libasound2t64, etc.), breaking apt-get.
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout (with api-provider submodule)
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: "true"
 
       - name: Setup Node
         uses: actions/setup-node@v4

@@ -29,7 +29,9 @@ export default class TabManager extends AbstractManager {
         super();
         this.callback = () => {
             const file = factory();
-            file && this.update(file.path);
+            if (file) {
+                this.update(file.path).catch(console.error);
+            }
         };
     }
 
@@ -45,7 +47,7 @@ export default class TabManager extends AbstractManager {
         return this.enabled;
     }
 
-    protected async doDisable(): Promise<void> {
+    protected doDisable(): void {
         this.dispatcher.removeListener(this.ref);
         this.replacer?.disable();
         this.replacerDisplayText?.disable();
@@ -54,7 +56,7 @@ export default class TabManager extends AbstractManager {
         this.enabled = false;
     }
 
-    protected async doEnable(): Promise<void> {
+    protected doEnable(): void {
         this.enabled = true;
         this.initReplacer();
         this.ref = this.dispatcher.addListener({ name: "layout:change", cb: this.callback });
@@ -75,13 +77,13 @@ export default class TabManager extends AbstractManager {
         if (!leaf) {
             return;
         }
-        const proto = Object.getPrototypeOf(leaf);
+        const proto = Object.getPrototypeOf(leaf) as MarkdownLeaf;
         this.replacer = FunctionReplacer.tryCreate(proto, "setPinned", this, function (self, [pinned], vanilla) {
-            const result = vanilla.call(this, pinned);
+            const result: unknown = vanilla.call(this, pinned);
             // Guard this.view.file — it can be undefined for some leaves (e.g. after
             // switching a workspace with locked tabs), which used to crash (#251).
-            if (this?.view?.getViewType() === Leaves.MD && this.view?.file) {
-                self.innerUpdate(this.view.file.path);
+            if (this?.view?.getViewType() === (Leaves.MD as string) && this.view?.file) {
+                self.innerUpdate(this.view.file.path).catch(console.error);
             }
             return result;
         });
@@ -95,7 +97,8 @@ export default class TabManager extends AbstractManager {
             "getDisplayText",
             this,
             function (self, _args, vanilla) {
-                const filePath = this?.view?.file?.path ?? (this?.view?.getState?.() ?? {}).file ?? null;
+                const filePath =
+                    this?.view?.file?.path ?? ((this?.view?.getState?.() ?? {}).file as string | undefined) ?? null;
                 return filePath ? self.resolver.resolve(filePath) ?? vanilla.call(this) : vanilla.call(this);
             }
         );

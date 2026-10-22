@@ -17,7 +17,7 @@ import NoteLinkApprove from "./NoteLinkApprove";
 export default class NoteLinkFeature extends AbstractFeature<Feature> {
     private enabled = false;
     private resolver: ResolverInterface;
-    private refs: ListenerRef<any>[] = [];
+    private refs: ListenerRef<keyof AppEvents>[] = [];
 
     constructor(
         @inject(SI["feature:service"])
@@ -52,7 +52,7 @@ export default class NoteLinkFeature extends AbstractFeature<Feature> {
         this.refs.push(
             this.dispatcher.addListener<"metadata:cache:changed">({
                 name: "metadata:cache:changed",
-                cb: e => this.requestApprove(e.get().path),
+                cb: e => void this.requestApprove(e.get().path).catch(console.error),
             })
         );
         this.enabled = true;

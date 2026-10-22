@@ -50,7 +50,7 @@ export class InlineTitleManager extends AbstractManager {
     protected doEnable(): void {
         this.ref = this.dispatcher.addListener({
             name: "layout:change",
-            cb: () => this.refresh().catch(console.error),
+            cb: () => void this.refresh().catch(console.error),
         });
         this.enabled = true;
     }
@@ -112,6 +112,6 @@ export class InlineTitleManager extends AbstractManager {
     }
 
     private getTitleElId(view: MarkdownViewExt): string {
-        return `${view.getState().mode}-${this.getId()}-${view.leaf.id}`;
+        return `${view.getState().mode as string}-${this.getId()}-${view.leaf.id}`;
     }
 }

@@ -9,6 +9,30 @@ At release time, rename `## Unreleased` to the version being released.
 Meaningful Name starts at 1.0.0. The 4.x and older sections are releases of the original
 [Front Matter Title](https://github.com/snezhig/obsidian-front-matter-title), kept for history.
 
+## 1.0.2
+
+Requires Obsidian 1.13 or newer.
+
+### Changed
+- The settings page is rebuilt on Obsidian's new settings API, so every option shows up in Obsidian's settings
+  search. Features are switched on and off in one list; each enabled feature has its own page under
+  **Feature settings** with its options and templates, replacing the **Manage** pop-up.
+- The JavaScript processor modes (**Function** and **Function V2**) are removed: running code typed into
+  settings is something the Obsidian plugin review asks plugins to avoid. If one was selected, the processor
+  is switched off when you update. **Replace** (regular expressions) stays.
+
+### Fixed
+- Errors in background updates (settings changes, aliases, note links, tabs, the "what's new" notes) are now
+  logged to the console instead of being lost, and a feature that fails to start shows its error message.
+
+### Under the hood
+- The code is cleaned up for the Obsidian plugin review: no `any`, no unsafe values, no unhandled promises, no
+  direct styles or `innerHTML`.
+- The API types from Snezhig's `front-matter-plugin-api-provider` are included in
+  `src/Components/ApiAdapter/Contracts.ts` (ISC, credited) instead of a git submodule. The README no longer
+  points to that provider: it looks for the original plugin's id and cannot find Meaningful Name.
+- `builtin-modules` is replaced by Node's own module list, and the screenshot tool has its own tsconfig.
+
 ## 1.0.1
 
 ### Fixed

@@ -1,6 +1,6 @@
 export default interface LoggerInterface {
-    log(...value: any[]): void;
-    info(...value: any[]): void;
-    debug(...value: any[]): void;
-    warn(...value: any[]): void;
+    log(...value: unknown[]): void;
+    info(...value: unknown[]): void;
+    debug(...value: unknown[]): void;
+    warn(...value: unknown[]): void;
 }

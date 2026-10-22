@@ -51,17 +51,18 @@ export default class SuggestFeature extends AbstractFeature<Feature> {
     }
 
     private createChooserReplacer(chooser: Newable<Chooser>): void {
-        if (typeof chooser?.prototype?.setSuggestions !== "function") {
+        const proto = chooser?.prototype as Chooser | undefined;
+        if (typeof proto?.setSuggestions !== "function") {
             console.error("[meaningful-name] Chooser.setSuggestions not found, Suggest feature degraded.");
             return;
         }
         this.replacer = FunctionReplacer.tryCreate(
-            chooser.prototype,
+            proto,
             "setSuggestions",
             this,
-            function (self: SuggestFeature, args: unknown[], vanilla: (e: any) => any) {
+            function (self: SuggestFeature, args: unknown[], vanilla: (...e: unknown[]) => unknown) {
                 if (Array.isArray(args?.[0])) {
-                    args[0] = self.modifySuggestions(args[0]);
+                    args[0] = self.modifySuggestions(args[0] as SuggestModalChooserFileItem[]);
                 }
                 return vanilla.call(this, ...args);
             }

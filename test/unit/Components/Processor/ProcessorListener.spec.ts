@@ -8,16 +8,14 @@ import Event from "../../../../src/Components/EventDispatcher/Event";
 import { mock } from "jest-mock-extended";
 import ProcessorInterface from "../../../../src/Components/Processor/Interfaces";
 import { ResolverEvents } from "@src/Resolver/ResolverType";
-import ProcessorArgumentTransformer from "@src/Components/Processor/ProcessorArgumentTransformer";
 
 type Events = AppEvents & ResolverEvents;
 const events: Map<ListenerRef<keyof Events>, Callback<Events[keyof Events]>> = new Map();
 
 const mockDispatcher = new EventDispatcherMock<Events>(events);
 const mockFactory = jest.fn();
-const argumentTransformer = new ProcessorArgumentTransformer();
 
-const listener = new ProcessorListener(mockDispatcher, mockFactory, argumentTransformer);
+const listener = new ProcessorListener(mockDispatcher, mockFactory);
 
 beforeEach(() => {
     mockDispatcher.addListener.mockClear();
@@ -49,10 +47,10 @@ test("Should not do anything on config loaded, because processor is null", () =>
 test("Should createNamed a processor and bind new event", () => {
     mockDispatcher.dispatch(
         "settings.loaded",
-        new Event({ settings: { processor: { type: ProcessorTypes.Function, args: ["foo"] } } })
+        new Event({ settings: { processor: { type: ProcessorTypes.Replace, args: ["foo"] } } })
     );
     expect(mockFactory).toHaveBeenCalledTimes(1);
-    expect(mockFactory).toHaveBeenCalledWith(ProcessorTypes.Function, ["foo"]);
+    expect(mockFactory).toHaveBeenCalledWith(ProcessorTypes.Replace, ["foo"]);
     expect(mockDispatcher.addListener).toHaveBeenCalledWith({ name: "resolver:resolved", cb: expect.anything() });
     expect(mockDispatcher.addListener).toHaveBeenCalledTimes(1);
 });
@@ -86,7 +84,7 @@ describe("Test 'resolver:resolved' listener", () => {
         mockFactory.mockReturnValueOnce(mockProcessor);
         mockDispatcher.dispatch(
             "settings:changed",
-            new Event({ actual: { processor: { type: ProcessorTypes.Function } } })
+            new Event({ actual: { processor: { type: ProcessorTypes.Replace } } })
         );
     });
     const modify = jest.fn();

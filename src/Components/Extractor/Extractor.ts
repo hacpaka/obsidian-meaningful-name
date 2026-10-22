@@ -18,7 +18,7 @@ export default class Extractor implements ExtractorInterface {
      * @param path
      * @param obj
      */
-    extract(path: string, obj: { [p: string]: any }): string | null | never {
+    extract(path: string, obj: unknown): string | null | never {
         const parts = path.split(".");
 
         let part: string;
@@ -50,10 +50,11 @@ export default class Extractor implements ExtractorInterface {
      * @param obj
      * @private
      */
-    private extractInternal(key: string, obj: { [p: string]: any }): any | never {
-        if (obj === undefined || obj?.[key] === undefined) {
+    private extractInternal(key: string, obj: unknown): unknown {
+        const value = (obj as Record<string, unknown> | undefined)?.[key];
+        if (value === undefined) {
             throw new PathNotFoundException(`Key ${key} not found`);
         }
-        return obj[key];
+        return value;
     }
 }

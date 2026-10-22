@@ -9,7 +9,6 @@ import { ProcessorFactory, ProcessorTypes } from "./ProcessorUtils";
 import ProcessorInterface from "./Interfaces";
 import { inject, injectable } from "inversify";
 import SI from "../../../config/inversify.types";
-import ProcessorArgumentTransformer from "@src/Components/Processor/ProcessorArgumentTransformer";
 
 @injectable()
 export default class ProcessorListener implements ListenerInterface {
@@ -22,9 +21,7 @@ export default class ProcessorListener implements ListenerInterface {
         @inject(SI["event:dispatcher"])
         private dispatcher: EventDispatcherInterface<AppEvents & ResolverEvents>,
         @inject(SI["processor:factory"])
-        private factory: ProcessorFactory,
-        @inject(SI["processor:argument.transformer"])
-        private transformer: ProcessorArgumentTransformer
+        private factory: ProcessorFactory
     ) {}
 
     bind(): void {
@@ -60,7 +57,7 @@ export default class ProcessorListener implements ListenerInterface {
         if (this.resolvedRef === null) {
             this.resolvedRef = this.dispatcher.addListener({
                 name: "resolver:resolved",
-                cb: this.handleResolved.bind(this),
+                cb: e => this.handleResolved(e),
             });
         }
     }
@@ -73,8 +70,7 @@ export default class ProcessorListener implements ListenerInterface {
         if (this.processor === null) {
             return;
         }
-        const arg = this.transformer.transform(event, this.processor.getType());
-        const value = this.processor.process(arg) ?? null;
+        const value = this.processor.process(obj.value) ?? null;
         if (value) {
             obj.modify(value);
         }

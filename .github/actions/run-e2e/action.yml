@@ -1,6 +1,6 @@
 name: Run e2e
 description: Install the Electron/Xvfb system deps and run the Obsidian e2e suite.
-# Expects the repo checked out (with the api-provider submodule), Node set up,
+# Expects the repo checked out, Node set up,
 # `npm ci` and `npm run build` already done by the caller.
 runs:
   using: composite

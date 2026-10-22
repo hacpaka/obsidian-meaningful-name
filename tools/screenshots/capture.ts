@@ -1,5 +1,4 @@
 import { browser, $ } from "@wdio/globals";
-import * as path from "path";
 
 /**
  * Documentation screenshot generator — NOT a test.
@@ -21,10 +20,21 @@ import * as path from "path";
  */
 
 const PLUGIN_ID = "meaningful-name";
-const OUT = path.resolve("docs/img");
+const OUT = `${process.cwd()}/docs/img`;
 const ACTIVATION = 5000; // bind() activation gate, see E2E_TEST_PLAN.md
 
-const cmd = (id: string) => browser.executeObsidian(({ app }, c) => (app as any).commands.executeCommandById(c), id);
+// The parts of Obsidian's internal (untyped) app API this tool calls.
+type StorageItem = { get(key: string): StorageItem | undefined; set(value: unknown): void };
+type AppInternals = {
+    commands: { executeCommandById(id: string): boolean };
+    plugins: { plugins: Record<string, { storage?: StorageItem } | undefined> };
+};
+
+const cmd = (id: string) =>
+    browser.executeObsidian(
+        ({ app }, c: string) => (app as unknown as AppInternals).commands.executeCommandById(c),
+        id
+    );
 const disableFeatures = async () => {
     await cmd(`${PLUGIN_ID}:omn-features-stop`);
     await browser.pause(1500);
@@ -41,7 +51,7 @@ const reloadFeatures = async () => {
 const setSort = (on: boolean) =>
     browser.executeObsidian(
         ({ app }, id, val) => {
-            const p = (app as any).plugins.plugins[id];
+            const p = (app as unknown as AppInternals).plugins.plugins[id];
             p?.storage?.get("features")?.get("explorer")?.get("sort")?.set(val);
         },
         PLUGIN_ID,
@@ -50,7 +60,7 @@ const setSort = (on: boolean) =>
 
 const openFile = (p: string) =>
     browser.executeObsidian(async ({ app }, file) => {
-        const f = (app as any).vault.getAbstractFileByPath(file);
+        const f = app.vault.getFileByPath(file);
         if (f) await app.workspace.getLeaf(false).openFile(f);
     }, p);
 
@@ -64,14 +74,14 @@ const waitForText = (selector: string, text: string) =>
     });
 
 const shotEl = async (selector: string, name: string) => {
-    const el = await $(selector);
+    const el = $(selector);
     await el.waitForExist({ timeout: 20000 });
     const size = await el.getSize();
     if (!size.width || !size.height) {
         process.stdout.write(`[shots] skip ${name}: ${selector} has 0 size\n`);
         return;
     }
-    await el.saveScreenshot(path.join(OUT, name));
+    await el.saveScreenshot(`${OUT}/${name}`);
 };
 
 /**
@@ -81,16 +91,16 @@ const shotEl = async (selector: string, name: string) => {
  */
 const highlight = (container: string, itemSel: string, text: string) =>
     browser.execute(
-        (cSel, iSel, t) => {
-            const c = document.querySelector(cSel) as HTMLElement | null;
+        (cSel: string, iSel: string, t: string) => {
+            const c = document.querySelector<HTMLElement>(cSel);
             if (!c) return;
-            const items = Array.from(c.querySelectorAll(iSel)) as HTMLElement[];
+            const items = Array.from(c.querySelectorAll<HTMLElement>(iSel));
             const target = items.find(e => (e.textContent ?? "").includes(t)) ?? items[0];
             if (!target) return;
             const cr = c.getBoundingClientRect();
             const tr = target.getBoundingClientRect();
             const pad = 4;
-            const ring = document.createElement("div");
+            const ring = createDiv();
             ring.setAttribute("data-omn-shot", "1");
             Object.assign(ring.style, {
                 position: "absolute",
@@ -128,7 +138,7 @@ describe("Meaningful Name — documentation screenshots", function () {
     before(async function () {
         await browser.pause(ACTIVATION);
         try {
-            await (browser as any).setWindowSize(1280, 1024);
+            await browser.setWindowSize(1280, 1024);
         } catch {
             /* window sizing is best-effort under Xvfb */
         }
@@ -176,9 +186,9 @@ describe("Meaningful Name — documentation screenshots", function () {
     it("Search", async function () {
         const type = () =>
             browser.execute(() => {
-                const input = document.querySelector(
+                const input = document.querySelector<HTMLInputElement>(
                     ".workspace-leaf-content[data-type='search'] .search-input-container input"
-                ) as HTMLInputElement | null;
+                );
                 if (input) {
                     input.value = "note";
                     input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -209,7 +219,7 @@ describe("Meaningful Name — documentation screenshots", function () {
             await cmd("switcher:open");
             await $(".prompt").waitForExist({ timeout: 20000 });
             await browser.execute(() => {
-                const input = document.querySelector(".prompt input") as HTMLInputElement | null;
+                const input = document.querySelector<HTMLInputElement>(".prompt input");
                 if (input) {
                     input.value = "note";
                     input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -241,7 +251,7 @@ describe("Meaningful Name — documentation screenshots", function () {
                     document.querySelectorAll(".workspace-leaf-content[data-type='bookmarks'] .tree-item")
                 ).find(i => (i.querySelector(".tree-item-self")?.textContent ?? "").includes("My Group"));
                 if (item && item.classList.contains("is-collapsed")) {
-                    (item.querySelector(".tree-item-self") as HTMLElement | null)?.click();
+                    item.querySelector<HTMLElement>(".tree-item-self")?.click();
                 }
             });
 

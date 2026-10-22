@@ -18,7 +18,11 @@ export class CanvasManager extends AbstractManager {
     private updateByRequestFrame = debounce(
         () => {
             this.logger.log(`updateByRequestFrame`, this.queue);
-            Array.from(this.queue.values()).forEach(e => this.innerUpdate(e) && this.queue.delete(e));
+            // Each path leaves the queue once its update has started, whatever the result.
+            for (const path of Array.from(this.queue)) {
+                this.innerUpdate(path).catch(console.error);
+                this.queue.delete(path);
+            }
         },
         1000,
         true
@@ -59,7 +63,7 @@ export class CanvasManager extends AbstractManager {
     protected doEnable(): void {
         this.ref = this.dispatcher.addListener({
             name: "layout:change",
-            cb: () => this.refresh().catch(console.error),
+            cb: () => void this.refresh().catch(console.error),
         });
         this.enabled = true;
     }
@@ -95,22 +99,21 @@ export class CanvasManager extends AbstractManager {
                 promises.push(
                     this.resolve(node.filePath).then(title => {
                         if (title) {
-                            this.setNodeTitle(node, title);
-                        } else {
-                            this.restoreNodeTitle(node);
+                            return this.setNodeTitle(node, title);
                         }
+                        this.restoreNodeTitle(node);
                     })
                 );
             }
 
             if (!canvas.requestFrame._originalFunc) {
                 const originalFunc = canvas.requestFrame;
-                const manager = this;
-                canvas.requestFrame = function (...args) {
-                    canvas.requestFrame._originalFunc.apply(this, args);
-                    if (manager.enabled) {
-                        manager.queue.add(currentPath);
-                        manager.updateByRequestFrame();
+                // Obsidian calls it as canvas.requestFrame(), so the original runs on the canvas.
+                canvas.requestFrame = (...args) => {
+                    canvas.requestFrame._originalFunc.apply(canvas, args);
+                    if (this.enabled) {
+                        this.queue.add(currentPath);
+                        this.updateByRequestFrame();
                     } else {
                         canvas.requestFrame = canvas.requestFrame._originalFunc;
                     }
@@ -151,7 +154,7 @@ export class CanvasManager extends AbstractManager {
             this.fakeTitleElementService.setVisible(ids.label, true);
         }
 
-        const inlineTitleEl = node.contentEl?.querySelector(".inline-title") as HTMLElement;
+        const inlineTitleEl = node.contentEl?.querySelector<HTMLElement>(".inline-title");
         const inline = this.fakeTitleElementService.getOrCreate({
             original: inlineTitleEl,
             title,

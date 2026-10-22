@@ -40,14 +40,14 @@ export class MarkdownHeaderManager extends AbstractManager {
 
     protected doDisable(): void {
         this.dispatcher.removeListener(this.ref);
-        this.facade.getViewsOfType<MarkdownViewExt>(Leaves.MD).forEach(this.revert.bind(this));
+        this.facade.getViewsOfType<MarkdownViewExt>(Leaves.MD).forEach(view => this.revert(view));
         this.enabled = false;
     }
 
     protected doEnable(): void {
         this.ref = this.dispatcher.addListener({
             name: "layout:change",
-            cb: () => this.refresh().catch(console.error),
+            cb: () => void this.refresh().catch(console.error),
         });
         this.enabled = true;
     }
@@ -77,7 +77,7 @@ export class MarkdownHeaderManager extends AbstractManager {
 
     private setTitle(view: MarkdownViewExt, title: string | null): void {
         this.logger.log(`Set title "${title ?? " "}" for ${view.file.path}`);
-        const container = view.titleContainerEl as HTMLDivElement;
+        const container = view.titleContainerEl;
 
         if (!title) {
             return this.revert(view);
@@ -99,7 +99,7 @@ export class MarkdownHeaderManager extends AbstractManager {
         if (!view.file) {
             return;
         }
-        const container = view.titleContainerEl as HTMLDivElement;
+        const container = view.titleContainerEl;
         const el = this.findExistingFakeEl(container);
         if (el) {
             container.removeChild(el);
@@ -132,7 +132,7 @@ export class MarkdownHeaderManager extends AbstractManager {
                 el.hidden = false;
             };
         };
-        (view.titleContainerEl as HTMLDivElement).appendChild(el);
+        view.titleContainerEl.appendChild(el);
         return el;
     }
 }

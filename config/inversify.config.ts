@@ -3,7 +3,6 @@ import { Container as _Container } from "inversify";
 import SI from "./inversify.types";
 import CreatorModule from "./services/creator.config";
 import bindFeature from "./services/feature.config";
-import bindSettings from "./services/settings.config";
 import processorModule from "./services/processors.config";
 import resolverModule from "./services/resolver.config";
 import apiAdapterModule from "./services/api.adapter.config";
@@ -28,6 +27,7 @@ import EventDispatcherInterface from "@src/Components/EventDispatcher/Interfaces
 import { EventDispatcher } from "@src/Components/EventDispatcher/EventDispatcher";
 import BlackWhiteListListener from "@src/Components/BlackWhiteList/BlackWhiteListListener";
 import FunctionReplacer from "@src/Utils/FunctionReplacer";
+import { AppEvents } from "@src/Types";
 import ProcessorListener from "../src/Components/Processor/ProccessorListener";
 import FakeTitleElementService from "@src/Utils/FakeTitleElementService";
 import BooleanStrategy from "@src/Components/Extractor/BooleanStrategy";
@@ -35,7 +35,7 @@ import SearchDomWrapperService from "../src/Utils/SearchDomWrapperService";
 import { Delayer, DelayerInterface } from "@src/Components/Delayer/Delayer";
 
 const Container = new _Container();
-Container.bind<EventDispatcherInterface<any>>(SI["event:dispatcher"]).to(EventDispatcher).inSingletonScope();
+Container.bind<EventDispatcherInterface<AppEvents>>(SI["event:dispatcher"]).to(EventDispatcher).inSingletonScope();
 Container.bind<string>(SI["template:pattern"]).toConstantValue("(?<placeholder>{{[^{}]+?}})");
 
 Container.bind<FilterInterface>(SI.filter).to(ExtensionFilter);
@@ -64,14 +64,11 @@ Container.bind<ListenerInterface>(SI.listener).to(ProcessorListener).whenTargetN
 
 Container.load(CreatorModule);
 bindFeature(Container);
-bindSettings(Container);
 Container.load(processorModule);
 Container.load(resolverModule);
 Container.load(apiAdapterModule);
 
-Container.bind(SI["factory:replacer"]).toFunction((t: any, m: any, a: unknown, i: any) =>
-    FunctionReplacer.tryCreate(t, m, a, i)
-);
+Container.bind(SI["factory:replacer"]).toFunction(FunctionReplacer.tryCreate);
 Container.bind(SI["service:search:dom:wrapper"]).to(SearchDomWrapperService).inSingletonScope();
 
 export default Container;

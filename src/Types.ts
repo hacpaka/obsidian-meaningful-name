@@ -4,7 +4,7 @@ import FeatureInterface from "@src/Interfaces/FeatureInterface";
 import { SettingsEvent } from "@src/Settings/SettingsType";
 import { CachedMetadata, TAbstractFile, TFile } from "obsidian";
 import { NoteLinkChange } from "./Feature/NoteLink/NoteLinkTypes";
-import { Events } from "../modules/api-provider/src";
+import { Events } from "./Components/ApiAdapter/Contracts";
 
 export type AppEvents = {
     "migrator:migrated": { from: string; to: string };
@@ -13,7 +13,7 @@ export type AppEvents = {
     "metadata:cache:changed": { path: string; cache: CachedMetadata };
     "manager:refresh": { id: Feature };
     "feature:state:changed": { id: Feature; enabled: boolean };
-    "feature:enable": { feature: FeatureInterface<any> };
+    "feature:enable": { feature: FeatureInterface<Feature> };
     "note:link:changes:approve": {
         path: string;
         changes: NoteLinkChange[];

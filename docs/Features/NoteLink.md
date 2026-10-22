@@ -1,10 +1,6 @@
 # Note Link Feature
 
-![img.png](../img/NoteLinkSettings.png)
-
-Settings opened by manage button
-
-![img.png](../img/NoteLinkSettingsManage.png)
+Turn it on under **Features**; its options are on the **Note Link** page under **Feature settings**.
 
 This feature work with
 internal [links to files](https://help.obsidian.md/Linking+notes+and+files/Internal+links#Link+to+a+file)

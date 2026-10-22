@@ -24,7 +24,9 @@ export default class ReleaseNoticeModal extends Modal {
         const whatsNew = typeof PLUGIN_WHATS_NEW === "string" ? PLUGIN_WHATS_NEW.trim() : "";
         this.component.load();
         const body = contentEl.createDiv();
-        MarkdownRenderer.render(this.app, whatsNew || `Updated to ${this.version}.`, body, "", this.component);
+        MarkdownRenderer.render(this.app, whatsNew || `Updated to ${this.version}.`, body, "", this.component).catch(
+            console.error
+        );
 
         contentEl.createEl("hr");
         contentEl.createEl("p", {

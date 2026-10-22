@@ -1,4 +1,4 @@
-export type ObjectItem = { [k: string | number]: any };
+export type ObjectItem = object;
 export type DynamicItem<T> = [T] extends [object] ? ObjectItemInterface<T> : PrimitiveItemInterface<T>;
 
 export interface PrimitiveItemInterface<T> {

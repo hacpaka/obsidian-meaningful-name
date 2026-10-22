@@ -1,6 +1,6 @@
 {
   "name": "obsidian-meaningful-name",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Shows a readable name from a note's frontmatter in place of its filename.",
   "main": "main.js",
   "scripts": {
@@ -41,7 +41,6 @@
     "@wdio/mocha-framework": "^9.28.0",
     "@wdio/spec-reporter": "^9.28.0",
     "adm-zip": "^0.6.0",
-    "builtin-modules": "^5.2.0",
     "esbuild": "^0.28.1",
     "eslint": "^10.5.0",
     "globals": "^17.7.0",

@@ -171,11 +171,6 @@ const zh: Translation = {
                 desc: "将用作 replace() 的第二个参数",
             },
         },
-        function: {
-            name: "函数",
-            desc: "将怎样起作用:",
-            valueDesc: "你在文本区输入的值",
-        },
     },
     command: {
         features: {

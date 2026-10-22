@@ -1,8 +1,8 @@
 {
   "id": "meaningful-name",
   "name": "Meaningful Name",
-  "version": "1.0.1",
-  "minAppVersion": "1.12.0",
+  "version": "1.0.2",
+  "minAppVersion": "1.13.0",
   "description": "Shows a readable name from a note's frontmatter in place of its filename: explorer, tabs, graph, search and more.",
   "author": "hacpaka",
   "authorUrl": "https://github.com/hacpaka",

@@ -71,7 +71,9 @@ test("Should request changes and execute them", async () => {
     mockFacade.getFileContent.mockResolvedValueOnce(content);
     mockFacade.modifyFile.mockResolvedValueOnce();
 
-    await callbacks["metadata:cache:changed"].cb(new Event({ path, cache: mock<CachedMetadata>() }));
+    callbacks["metadata:cache:changed"].cb(new Event({ path, cache: mock<CachedMetadata>() }));
+    // The listener starts the update without returning it; let its promises settle.
+    await new Promise(r => setImmediate(r));
     expect(mockService.getNoteLinks).toHaveBeenCalledWith(path);
     expect(mockApprove.request).toHaveBeenCalledWith(path, [
         { original: links.bar.original, replace: `[[${links.bar.link}|bar-resolved]]` },

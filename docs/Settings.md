@@ -64,4 +64,4 @@ Available from the command palette (**Ctrl/Cmd+P**):
 
 ## Processor
 
-An advanced, optional step that transforms the resolved title with a regular expression or custom JavaScript. Off by default. See **[Processor](./Processor.md)**.
+An advanced, optional step that transforms the resolved title with a regular expression. Off by default. See **[Processor](./Processor.md)**.

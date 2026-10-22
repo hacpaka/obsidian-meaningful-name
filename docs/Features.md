@@ -2,7 +2,7 @@
 
 A **feature** is a single place in Obsidian where the plugin replaces the displayed filename with your frontmatter title. Each one is independent: turn on only the places you care about in **Settings → Meaningful Name → Features**.
 
-Every feature uses your title [template](./Templates.md). By default they all share the **Common main template** (`name`), but each feature can use its own template — click **Manage** next to a feature to set one.
+Every feature uses your title [template](./Templates.md). By default they all share the **Common main template** (`name`), but each feature can use its own template — open the feature's page under **Feature settings** to set one.
 
 The features below are grouped by where you'll notice them.
 
@@ -24,7 +24,7 @@ The most common feature to enable first.
 
 #### Explorer → Sort
 
-When **Explorer** is on, you can also toggle **Sort** (click **Manage** on the Explorer feature). The explorer then sorts files by their displayed title instead of by filename — so the order matches what you actually read.
+When **Explorer** is on, you can also toggle **Sort** on the Explorer page under **Feature settings**. The explorer then sorts files by their displayed title instead of by filename — so the order matches what you actually read.
 
 |            Sort off             |            Sort on             |
 |:-------------------------------:|:------------------------------:|
@@ -132,7 +132,7 @@ These show the title while you read and write the note.
 
 > Modify the alias in the metadata cache. Your real alias in the file is **not** affected — only Obsidian's cache, so the title becomes searchable/linkable as an alias.
 
-This feature has two options (click **Manage**):
+This feature has two options, on its page under **Feature settings**:
 
 **Validator** — which files it processes:
 

@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import { AppExt, CachedMetadata, Modal, Notice, Plugin } from "obsidian";
+import { AppExt, CachedMetadata, Modal, Notice, Plugin, TAbstractFile, WorkspaceExt } from "obsidian";
 import { SettingsEvent, SettingsType } from "@src/Settings/SettingsType";
 import SettingsTab from "@src/Settings/SettingsTab";
 import Storage from "@src/Storage/Storage";
@@ -20,7 +20,7 @@ import FeatureComposer from "@src/Feature/FeatureComposer";
 import ManagerComposer from "@src/Feature/ManagerComposer";
 import { ObsidianMetaFactory } from "@config/inversify.factory.types";
 import ListenerInterface from "@src/Interfaces/ListenerInterface";
-import { PluginInterface } from "front-matter-plugin-api-provider";
+import { PluginInterface } from "@src/Components/ApiAdapter/Contracts";
 import Defer, { DeferFeaturesReady, DeferPluginReady } from "@src/Components/ApiAdapter/Defer";
 import EventDispatcherInterface from "@src/Components/EventDispatcher/Interfaces/EventDispatcherInterface";
 import { t } from "@src/i18n/Locale";
@@ -78,7 +78,7 @@ export default class MetaTitlePlugin extends Plugin implements PluginInterface {
     }
 
     private async loadSettings(): Promise<void> {
-        const loaded = await this.loadData();
+        const loaded = (await this.loadData()) as Partial<SettingsType> | null;
         // Remember the previously installed version (null on a fresh install) to
         // decide whether to show the "what's new" notice after an update.
         this.previousVersion = loaded ? loaded.version ?? "0.0.0" : null;
@@ -123,21 +123,12 @@ export default class MetaTitlePlugin extends Plugin implements PluginInterface {
     }
 
     private bindServices(): void {
-        Container.bind<interfaces.Factory<{ [k: string]: any }>>(SI["factory:obsidian:file"]).toFactory<
-            { [k: string]: any },
+        Container.bind<interfaces.Factory<TAbstractFile | null>>(SI["factory:obsidian:file"]).toFactory<
+            TAbstractFile | null,
             [string]
-        >(
-            () =>
-                (path: string): any =>
-                    this.app.vault.getAbstractFileByPath(path)
-        );
-        Container.bind<interfaces.Factory<{ [k: string]: any }>>(SI["factory:obsidian:meta"]).toFactory<
-            { [k: string]: any },
-            [string, string]
-        >(
-            () =>
-                (path: string, type: string): any =>
-                    this.app.metadataCache.getCache(path)?.[type as keyof CachedMetadata]
+        >(() => (path: string) => this.app.vault.getAbstractFileByPath(path));
+        Container.bind<interfaces.Factory<unknown>>(SI["factory:obsidian:meta"]).toFactory<unknown, [string, string]>(
+            () => (path: string, type: string) => this.app.metadataCache.getCache(path)?.[type as keyof CachedMetadata]
         );
         Container.bind<ObsidianFacade>(SI["facade:obsidian"]).toConstantValue(new ObsidianFacade(this.app as AppExt));
 
@@ -145,8 +136,11 @@ export default class MetaTitlePlugin extends Plugin implements PluginInterface {
         Container.bind(SI["obsidian:app"]).toConstantValue(this.app);
         Container.bind(SI["obsidian:plugin"]).toConstantValue(this);
         Container.bind(SI["newable:obsidian:chooser"]).toConstructor(
-            //@ts-ignore
-            Object.getPrototypeOf(this.app.workspace.editorSuggest.suggests[0].suggestions).constructor
+            (
+                Object.getPrototypeOf((this.app.workspace as WorkspaceExt).editorSuggest.suggests[0].suggestions) as {
+                    constructor: interfaces.Newable<unknown>;
+                }
+            ).constructor
         );
         Container.bind(SI["factory:obsidian:active:file"]).toFunction(() => this.app.workspace.getActiveFile());
         Container.bind(SI["factory:obsidian:modal"]).toFunction(() => new Modal(this.app));
@@ -176,16 +170,19 @@ export default class MetaTitlePlugin extends Plugin implements PluginInterface {
         });
         this.dispatcher.addListener({
             name: "resolver:unresolved",
-            cb: e => this.mc.update(e.get().path).catch(console.error),
+            cb: e => void this.mc.update(e.get().path).catch(console.error),
         });
 
-        this.dispatcher.addListener({ name: "settings:changed", cb: e => this.onSettingsChange(e.get().actual) });
+        this.dispatcher.addListener({
+            name: "settings:changed",
+            cb: e => void this.onSettingsChange(e.get().actual).catch(console.error),
+        });
     }
 
     private reloadFeatures(): void {
         this.fc.disableAll();
         const f = this.storage.get("features");
-        const states = [];
+        const states: [Feature, boolean][] = [];
 
         for (const feature of Object.values(Feature)) {
             states.push([feature, f.get(feature).get("enabled").value()]);
@@ -193,12 +190,12 @@ export default class MetaTitlePlugin extends Plugin implements PluginInterface {
 
         for (const [id, state] of states) {
             try {
-                this.fc.toggle(id, state as boolean);
+                this.fc.toggle(id, state);
             } catch (e) {
                 //TODO: refactor
                 this.fc.toggle(id, false);
                 this.logger.log(e);
-                new Notice(e);
+                new Notice(String(e));
             }
         }
     }

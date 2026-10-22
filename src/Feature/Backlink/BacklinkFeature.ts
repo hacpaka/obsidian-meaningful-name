@@ -40,7 +40,7 @@ export default class BacklinkFeature extends AbstractFeature<Feature> {
             if (this.timer) {
                 window.clearTimeout(this.timer);
             }
-            this.timer = window.setTimeout(this.process.bind(this), 50);
+            this.timer = window.setTimeout(() => this.process(), 50);
         };
     }
 
@@ -61,11 +61,11 @@ export default class BacklinkFeature extends AbstractFeature<Feature> {
         this.refs = [
             this.dispatcher.addListener({
                 name: "metadata:cache:changed",
-                cb: this.dProcess.bind(this),
+                cb: () => this.dProcess(),
             }),
             this.dispatcher.addListener({
                 name: "layout:change",
-                cb: this.dProcess.bind(this),
+                cb: () => this.dProcess(),
             }),
         ];
         this.process();

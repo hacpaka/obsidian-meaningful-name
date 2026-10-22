@@ -1,3 +1,5 @@
+import { FrontMatterCache } from "obsidian";
+
 export default class Alias {
     private changed = false;
     private original: {
@@ -5,7 +7,7 @@ export default class Alias {
         value: string | string[] | null;
     } = undefined;
 
-    constructor(private cache: { [k: string]: any }) {}
+    constructor(private cache: FrontMatterCache) {}
 
     public getKey(): string | null {
         for (const key of Object.keys(this.cache)) {
@@ -17,7 +19,7 @@ export default class Alias {
     }
 
     public getValue(): string | string[] | null {
-        const val = this.cache[this.getKey()] ?? null;
+        const val = (this.cache[this.getKey()] as string | string[] | undefined) ?? null;
         return Array.isArray(val) ? [...val] : val;
     }
 

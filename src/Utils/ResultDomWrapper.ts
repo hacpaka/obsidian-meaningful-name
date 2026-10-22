@@ -7,7 +7,7 @@ export default class ResultDomWrapper {
 
     constructor(private resolver: ResolverInterface = null, dom: SearchDOM) {
         this.replacer = FunctionReplacer.tryCreate(dom, "addResult", this, (self, defaultArgs, vanilla) => {
-            const c = vanilla.call(dom, ...defaultArgs);
+            const c = vanilla.call(dom, ...defaultArgs) as { containerEl: HTMLElement };
             const file = defaultArgs[0];
             self.processLookupItem(file, c);
             return c;
@@ -25,13 +25,13 @@ export default class ResultDomWrapper {
     }
 
     private process(): void {
-        const lookup = this.replacer?.getTarget()?.resultDomLookup ?? new Map();
+        const lookup = this.replacer?.getTarget()?.resultDomLookup ?? new Map<TFile, { containerEl: HTMLElement }>();
         for (const [file, item] of lookup) {
             this.processLookupItem(file, item);
         }
     }
 
-    private processLookupItem(file: TFile, item: any): void {
+    private processLookupItem(file: TFile, item: { containerEl: HTMLElement }): void {
         const restore = !this?.replacer?.isEnabled();
         if (file.extension !== "md") {
             return;

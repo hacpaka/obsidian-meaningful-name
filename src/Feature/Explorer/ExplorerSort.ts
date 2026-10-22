@@ -40,9 +40,9 @@ export default class ExplorerSort {
         >
     ) {
         this.resolver = service.createResolver(Feature.Explorer);
-        const trigger = debounce(this.onManagerUpdate.bind(this), 1000);
+        const trigger = debounce(() => this.onManagerUpdate(), 1000);
         this.cb = e => {
-            if (e.id === Feature.Explorer && (e.result === true || e.result === undefined)) {
+            if (e.id === (Feature.Explorer as string) && (e.result === true || e.result === undefined)) {
                 trigger();
             }
         };
@@ -110,7 +110,7 @@ export default class ExplorerSort {
         this.logger.log("Init replacer");
 
         this.replacer = this.replacerFactory(
-            Object.getPrototypeOf(this.view),
+            Object.getPrototypeOf(this.view) as TFileExplorerView,
             "getSortedFolderItems",
             this,
             // Regular function (not an arrow) so `this` is the file-explorer view

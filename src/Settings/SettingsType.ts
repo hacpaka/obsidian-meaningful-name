@@ -40,9 +40,7 @@ export type SettingsType = {
 
 export type SettingsEvent = {
     "settings:changed": { old: SettingsType; actual: SettingsType; changed: Changed<SettingsType> };
-    "settings:tab:close": null;
     "settings.loaded": { settings: SettingsType };
-    "settings:tab:feature:changed": { id: Feature; value: SettingsFeature[keyof SettingsFeature] };
 };
 
 // enum Feature {

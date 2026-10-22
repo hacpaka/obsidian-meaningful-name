@@ -47,38 +47,41 @@ export default (container: Container) => {
     container.bind(SI["feature:helper"]).to(FeatureHelper).inSingletonScope();
 
     container
-        .bind<interfaces.AutoNamedFactory<FeatureInterface<any>>>(SI["factory:feature"])
-        .toAutoNamedFactory<FeatureInterface<any>>(SI.feature)
+        .bind<interfaces.AutoNamedFactory<FeatureInterface<Feature>>>(SI["factory:feature"])
+        .toAutoNamedFactory<FeatureInterface<Feature>>(SI.feature)
         .onActivation((c, i) => (name: string) => {
-            const feature: FeatureInterface<any> = i(name);
+            const feature: FeatureInterface<Feature> = i(name);
             if (feature instanceof AbstractManager) {
                 const service: FeatureService = c.container.get(SI["feature:service"]);
                 feature.setResolver(service.createResolver(feature.getId()));
             }
             return feature;
         });
-    container.bind<FeatureInterface<any>>(SI.feature).to(AliasFeature).whenTargetNamed(AliasFeature.getId());
+    container.bind<FeatureInterface<Feature>>(SI.feature).to(AliasFeature).whenTargetNamed(AliasFeature.getId());
     container
-        .bind<FeatureInterface<any>>(SI.feature)
+        .bind<FeatureInterface<Feature>>(SI.feature)
         .to(WindowFrameFeature)
         .whenTargetNamed(WindowFrameFeature.getId());
-    container.bind<FeatureInterface<any>>(SI.feature).to(ExplorerManager).whenTargetNamed(ExplorerManager.getId());
-    container.bind<FeatureInterface<any>>(SI.feature).to(SearchFeature).whenTargetNamed(SearchFeature.getId());
-    container.bind<FeatureInterface<any>>(SI.feature).to(BookmarksManager).whenTargetNamed(BookmarksManager.getId());
-    container.bind<FeatureInterface<any>>(SI.feature).to(TabManager).whenTargetNamed(TabManager.getId());
-    container.bind<FeatureInterface<any>>(SI.feature).to(SuggestFeature).whenTargetNamed(SuggestFeature.getId());
-    container.bind<FeatureInterface<any>>(SI.feature).to(GraphManager).whenTargetNamed(GraphManager.getId());
+    container.bind<FeatureInterface<Feature>>(SI.feature).to(ExplorerManager).whenTargetNamed(ExplorerManager.getId());
+    container.bind<FeatureInterface<Feature>>(SI.feature).to(SearchFeature).whenTargetNamed(SearchFeature.getId());
     container
-        .bind<FeatureInterface<any>>(SI.feature)
+        .bind<FeatureInterface<Feature>>(SI.feature)
+        .to(BookmarksManager)
+        .whenTargetNamed(BookmarksManager.getId());
+    container.bind<FeatureInterface<Feature>>(SI.feature).to(TabManager).whenTargetNamed(TabManager.getId());
+    container.bind<FeatureInterface<Feature>>(SI.feature).to(SuggestFeature).whenTargetNamed(SuggestFeature.getId());
+    container.bind<FeatureInterface<Feature>>(SI.feature).to(GraphManager).whenTargetNamed(GraphManager.getId());
+    container
+        .bind<FeatureInterface<Feature>>(SI.feature)
         .to(MarkdownHeaderManager)
         .whenTargetNamed(MarkdownHeaderManager.getId());
-    container.bind<FeatureInterface<any>>(SI.feature).to(BacklinkManager).whenTargetNamed(BacklinkManager.getId());
-    container.bind<FeatureInterface<any>>(SI.feature).to(NoteLinkFeature).whenTargetNamed(NoteLinkFeature.getId());
+    container.bind<FeatureInterface<Feature>>(SI.feature).to(BacklinkManager).whenTargetNamed(BacklinkManager.getId());
+    container.bind<FeatureInterface<Feature>>(SI.feature).to(NoteLinkFeature).whenTargetNamed(NoteLinkFeature.getId());
     container
-        .bind<FeatureInterface<any>>(SI.feature)
+        .bind<FeatureInterface<Feature>>(SI.feature)
         .to(InlineTitleManager)
         .whenTargetNamed(InlineTitleManager.getId());
-    container.bind<FeatureInterface<any>>(SI.feature).to(CanvasManager).whenTargetNamed(CanvasManager.getId());
+    container.bind<FeatureInterface<Feature>>(SI.feature).to(CanvasManager).whenTargetNamed(CanvasManager.getId());
 
     container
         .bind(SI["factory:alias:modifier:strategy"])

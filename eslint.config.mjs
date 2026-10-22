@@ -18,7 +18,6 @@ export default tseslint.config(
         rules: {
             quotes: "off",
             "@typescript-eslint/ban-ts-comment": "off",
-            "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/no-this-alias": "off",
             // Project idioms that the pre-upgrade config did not flag:
             "@typescript-eslint/no-unsafe-function-type": "off",

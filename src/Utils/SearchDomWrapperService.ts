@@ -43,7 +43,7 @@ export default class SearchDomWrapperService {
         if (this.timer) {
             window.clearTimeout(this.timer);
         }
-        this.timer = window.setTimeout(this.selfClean.bind(this), 10000);
+        this.timer = window.setTimeout(() => this.selfClean(), 10000);
     }
 
     private selfClean(): void {

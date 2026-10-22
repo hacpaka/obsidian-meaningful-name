@@ -6,14 +6,15 @@ import Event from "@src/Components/EventDispatcher/Event";
 import LoggerInterface from "@src/Components/Debug/LoggerInterface";
 import EventDispatcherInterface from "@src/Components/EventDispatcher/Interfaces/EventDispatcherInterface";
 import { Notice } from "obsidian";
+import { Feature } from "@src/Enum";
 
 @injectable()
 export default class FeatureComposer {
-    private features: { [k: string]: FeatureInterface<any> } = {};
+    private features: { [k: string]: FeatureInterface<Feature> } = {};
 
     constructor(
         @inject(SI["factory:feature"])
-        private factory: (name: string) => FeatureInterface<any>,
+        private factory: (name: string) => FeatureInterface<Feature>,
         @inject(SI["event:dispatcher"])
         private dispatcher: EventDispatcherInterface<AppEvents>,
         @inject(SI.logger)
@@ -21,7 +22,7 @@ export default class FeatureComposer {
         private logger: LoggerInterface
     ) {}
 
-    public get<K extends FeatureInterface<any>>(id: any): K | null {
+    public get<K extends FeatureInterface<Feature>>(id: Feature): K | null {
         return (this.features[id] as K) ?? null;
     }
 
@@ -29,7 +30,7 @@ export default class FeatureComposer {
         return Object.keys(this.features);
     }
 
-    toggle(id: any, state: boolean): void {
+    toggle(id: Feature, state: boolean): void {
         this.logger.log(`Feature - ${id} toggle to ${state}`);
         const feature = this.features[id];
         if ((!state && !feature) || (state && feature?.isEnabled())) {
@@ -45,17 +46,15 @@ export default class FeatureComposer {
         // internals that may have drifted; a throw here must not take down the
         // rest of the features or the plugin boot (the "white screen" reports).
         try {
-            feature[state ? "enable" : "disable"]();
+            void feature[state ? "enable" : "disable"]();
         } catch (e) {
             this.logger.log(`Feature - ${id} failed to ${state ? "enable" : "disable"}: ${e}`);
             console.error(`[meaningful-name] feature "${id}" failed to ${state ? "enable" : "disable"}`, e);
             if (state) {
-                new Notice(
-                    `[Meaningful Name] Feature "${id}" was disabled due to an error. See console for details.`
-                );
+                new Notice(`[Meaningful Name] Feature "${id}" was disabled due to an error. See console for details.`);
                 try {
-                    feature.disable();
-                } catch (_) {
+                    void feature.disable();
+                } catch {
                     /* best-effort rollback */
                 }
                 delete this.features[id];
@@ -74,7 +73,7 @@ export default class FeatureComposer {
         for (const feature of Object.values(this.features)) {
             this.logger.log(`Disable feature ${feature.getId()}`);
             try {
-                feature.disable();
+                void feature.disable();
             } catch (e) {
                 console.error(`[meaningful-name] feature "${feature.getId()}" failed to disable`, e);
             }

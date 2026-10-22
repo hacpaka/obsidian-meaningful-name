@@ -147,6 +147,7 @@ const en = {
             desc: "Set the rule about how to process list values",
             first: "Use first value",
             join: "Join all by delimiter",
+            value: "Delimiter",
             placeholder: {
                 first: "First value will be used",
                 join: "Type a delimiter",
@@ -154,6 +155,9 @@ const en = {
         },
     },
     features: "Features",
+    featureSettings: "Feature settings",
+    templates: "Templates",
+    docs: "Documentation",
     util: "Util",
     debug_info: {
         title: "Debug info",
@@ -186,16 +190,6 @@ const en = {
                 name: "Replacement",
                 desc: "Will be used as a second argument of replace()",
             },
-        },
-        function: {
-            name: "Function",
-            desc: "How it will work:",
-            valueDesc: "Your value of text area",
-        },
-        functionV2: {
-            name: "Function V2",
-            desc: "How it will work:",
-            valueDesc: "Your value of text area",
         },
     },
     command: {

@@ -2,17 +2,13 @@
 
 The **Processor** is an advanced, optional step that runs **after** a title is resolved from your [template](./Templates.md) and transforms it further. Reach for it only when templates alone can't get the result you want — for example stripping a prefix, reformatting a date, or building a title with custom logic.
 
-It offers three modes: **Replace** (a regular expression), **Function** (custom JavaScript), and **Function V2** (custom JavaScript with file context). The latter two require some JavaScript knowledge.
+It has one mode, **Replace**, which applies a regular expression. By default, the processor is disabled.
 
-By default, the processor is disabled.
-
-![](img/Processor_disabled.png)
+> The JavaScript modes, **Function** and **Function V2**, were removed in 1.0.2. If one was selected, the processor is switched off when you update; use **Replace** or a [template](./Templates.md) instead.
 
 ## Replace
 
 In this mode processor will use RegExp to modify title.
-
-![img.png](img/Processor_replace.png)
 
 Plugin uses the following template:
 
@@ -38,40 +34,3 @@ After plugin resolves `foo` title it will execute the following construction:
 ```
 
 In this case `bar` value will be used as shown title
-
-## Function
-
-In this mode processor will use custom function you write inside text area:
-![img.png](img/Processor_function.png)
-
-You can read more about this
-logic [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function)
-Inside your function you will be able to use `title` variable which contains resolved title.
-A value returned by your function will be used as shown title
-
-## FunctionV2
-
-Works same as [Function](#function), but the argument is the object instead of string;
-Object your function will give an argument:
-
-```typescript
-// Object that will be given into FunctionV2 processor as an "obj" argument
-import {TFile} from "obsidian";
-
-export type FunctionV2ObjArg = {
-    // New file title
-    title: string;
-    // Path to file
-    path: string;
-    // Obisian's TFile
-    file: TFile | null;
-};
-```
-
-Example of text area:
-```typescript
-//just for debugging
-console.debug(obj)
-
-return obj.title + '-title-in-' + obj.path
-```

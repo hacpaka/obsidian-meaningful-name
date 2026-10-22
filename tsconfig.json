@@ -28,10 +28,10 @@
     "types": ["reflect-metadata", "node", "jest"],
     "paths": {
       "@config/*": ["./config/*"],
-      "@src/*": ["./src/*"],
-      "front-matter-plugin-api-provider": ["./modules/api-provider/src"]
+      "@src/*": ["./src/*"]
     }
   },
-  "include": ["./**/*.ts", "./src", "./config", "./modules/**/*.ts"],
+  "include": ["./**/*.ts", "./src", "./config"],
+  "exclude": ["node_modules", "tools"],
   "typescript.tsdk": "node_modules/typescript/lib"
 }

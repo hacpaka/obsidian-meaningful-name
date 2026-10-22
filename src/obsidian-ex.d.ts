@@ -28,7 +28,7 @@ declare module "obsidian" {
         innerEl: HTMLDivElement;
         sort?: () => void;
         vChildren?: {
-            setChildren(items: any[]): void;
+            setChildren(items: unknown[]): void;
         };
 
         updateTitle(): void;
@@ -38,10 +38,17 @@ declare module "obsidian" {
         getTitle(): string;
     }
 
+    export interface BookmarkItem {
+        type: string;
+        title: string;
+        path: string;
+        items?: BookmarkItem[];
+    }
+
     export abstract class BookmarksPluginLeaf extends WorkspaceLeafExt<BookmarksPluginView> {}
     export abstract class BookmarksPluginView extends ViewPluginEventable {
-        plugin: Plugin & Events & { items: { type: string | "file"; title: string; path: string }[] };
-        itemDoms: WeakMap<{ type: string | "file"; title: string; path: string }, { titleEl: Element }>;
+        plugin: Plugin & Events & { items: BookmarkItem[] };
+        itemDoms: WeakMap<BookmarkItem, { titleEl: Element }>;
     }
 
     export abstract class ViewPluginEventable extends View {
@@ -131,7 +138,7 @@ declare module "obsidian" {
     }
 
     export abstract class Chooser {
-        setSuggestions(e: any): any;
+        setSuggestions(items: unknown[]): void;
     }
 
     export interface SuggestModalChooserFileItem {
@@ -143,14 +150,14 @@ declare module "obsidian" {
 
     export interface SearchDOM {
         el: HTMLDivElement;
-        resultDomLookup: Map<TFile, HTMLDivElement>;
+        resultDomLookup: Map<TFile, { containerEl: HTMLElement }>;
 
         addResult(f: TFile, ...other: unknown[]): unknown;
     }
 
     export abstract class SearchPluginView extends View {
         dom: SearchDOM;
-        startSearch: () => any;
+        startSearch: () => void;
     }
 
     export abstract class MarkdownLeaf extends WorkspaceLeaf {
@@ -164,5 +171,6 @@ declare module "obsidian" {
 
     export class WorkspaceExt extends Workspace {
         updateTitle(): void;
+        editorSuggest: { suggests: { suggestions: object }[] };
     }
 }

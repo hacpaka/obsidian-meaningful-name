@@ -122,7 +122,7 @@ export default class FakeTitleElementService {
         el.removeClass("omn-hidden");
     }
 
-    private extractId(e: any): string | null {
+    private extractId(e: unknown): string | null {
         if (e instanceof HTMLElement) {
             return e.getAttribute(this.attr.fake) ?? e.getAttribute(this.attr.original);
         }

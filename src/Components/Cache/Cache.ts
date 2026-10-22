@@ -6,7 +6,7 @@ import ObjectHelper from "@src/Utils/ObjectHelper";
 
 @injectable()
 export default class Cache implements CacheInterface {
-    private pool = new Map<string, any>();
+    private pool = new Map<string, unknown>();
     private serialized = new Map<string, string>();
 
     clear(): void {
@@ -44,9 +44,9 @@ export default class Cache implements CacheInterface {
 
     private resolve<T>(key: string): T {
         if (this.pool.has(key)) {
-            return this.pool.get(key);
+            return this.pool.get(key) as T;
         }
-        return JSON.parse(this.serialized.get(key));
+        return JSON.parse(this.serialized.get(key)) as T;
     }
 
     private isObject(value: unknown): boolean {

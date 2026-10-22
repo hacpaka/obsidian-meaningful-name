@@ -74,11 +74,7 @@ See **[Template examples](./TemplateExamples.md)** for a full table covering arr
 
 By default every feature uses the common templates above. But you can override them per feature — handy when, say, the explorer should show a short title but the window frame a longer one.
 
-When a feature is enabled it shows a **Manage** button. Click it to open the feature's modal:
-
-![Example Explorer](img/FeatureTemplateExampleExplorer.png)
-
-In the **Templates** section:
+Every enabled feature gets its own page under **Feature settings**. On that page:
 
 - **Main** — this feature's own main template. If set, it's used instead of the common one.
 - **Fallback** — this feature's own fallback. If empty, the common fallback (`fallback_title`) is used.

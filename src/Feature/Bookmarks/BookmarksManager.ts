@@ -1,4 +1,4 @@
-import { BookmarksPluginLeaf, BookmarksPluginView, EventRef } from "obsidian";
+import { BookmarkItem, BookmarksPluginLeaf, BookmarksPluginView, EventRef } from "obsidian";
 import { inject, injectable, named } from "inversify";
 import SI from "@config/inversify.types";
 import ObsidianFacade from "@src/Obsidian/ObsidianFacade";
@@ -39,7 +39,7 @@ export default class BookmarksManager extends AbstractFeature<Feature> {
         private logger: LoggerInterface
     ) {
         super();
-        this.requestUpdate = () => window.setTimeout(this.onChanged.bind(this), 100);
+        this.requestUpdate = () => window.setTimeout(() => this.onChanged(), 100);
         this.resolver = service.createResolver(this.getId());
     }
 
@@ -115,7 +115,7 @@ export default class BookmarksManager extends AbstractFeature<Feature> {
         });
         this.metaRef = this.dispatcher.addListener({
             name: "metadata:cache:changed",
-            cb: this.requestUpdate.bind(this),
+            cb: () => this.requestUpdate(),
         });
         return true;
     }
@@ -161,7 +161,7 @@ export default class BookmarksManager extends AbstractFeature<Feature> {
         return result;
     }
 
-    private collectFileItems(items: any[], acc: any[] = []): any[] {
+    private collectFileItems(items: BookmarkItem[], acc: BookmarkItem[] = []): BookmarkItem[] {
         for (const item of items ?? []) {
             if (item?.type === "group" && Array.isArray(item.items)) {
                 this.collectFileItems(item.items, acc);

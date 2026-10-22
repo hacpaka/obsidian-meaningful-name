@@ -63,10 +63,6 @@ That's it. Enable more places from **[Features](./docs/Features.md)**, and learn
 
 > A frontmatter value used as a title **must be** a string, a number, or a list. If a key is missing or empty, the plugin falls back to the original filename. See [Template examples](./docs/TemplateExamples.md) for every case.
 
-## API
-
-Looking to integrate with another plugin? See the [API provider](https://github.com/Snezhig/front-matter-plguin-api-provider).
-
 ## Note
 
 Feel free to open an issue for bugs, mistakes, or ideas for this plugin.
@@ -77,4 +73,4 @@ Meaningful Name is a modified version of [Front Matter Title](https://github.com
 
 Modified by [hacpaka](https://github.com/hacpaka) since 2026-10-22: the plugin was renamed (new plugin id, so it installs separately from the original) and reads the `name` frontmatter key by default instead of `title`. See the [changelog](./CHANGELOG.md) for details.
 
-Like the original, this plugin is free software under the [GNU General Public License v3.0](./LICENSE).
+Like the original, this plugin is free software under the [GNU General Public License v3.0](./LICENSE). It also includes the API type definitions from Snezhig's [front-matter-plugin-api-provider](https://github.com/snezhig/front-matter-plugin-api-provider) under the ISC license; see `src/Components/ApiAdapter/Contracts.ts`.

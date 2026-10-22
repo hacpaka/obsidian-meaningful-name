@@ -1,4 +1,4 @@
-type obj = { [k: string]: any };
+type obj = { [k: string]: unknown };
 
 export type Changed<T> = { [K in keyof T]?: T[K] extends object ? Changed<T[K]> : boolean };
 export default class ObjectHelper {
@@ -12,13 +12,13 @@ export default class ObjectHelper {
             const thereIsNull = first === null || second === null;
             if (type === "object" && !thereIsNull) {
                 if (Array.isArray(first)) {
-                    const hasDiff = first.some(x => !second.includes(x));
-                    const isChanged = hasDiff ? true : second.some((x: string | number) => !first.includes(x));
+                    const hasDiff = first.some(x => !(second as unknown[]).includes(x));
+                    const isChanged = hasDiff ? true : (second as unknown[]).some(x => !first.includes(x));
                     if (isChanged) {
                         changed[k] = true;
                     }
                 } else {
-                    const c = ObjectHelper.compare(first, second);
+                    const c = ObjectHelper.compare(first as obj, second as obj);
                     if (Object.values(c).some(e => e !== false)) {
                         changed[k] = c;
                     }
@@ -32,7 +32,7 @@ export default class ObjectHelper {
         return changed as Changed<T>;
     }
 
-    public static fillFrom<T extends obj>(to: T, from: T): T {
+    public static fillFrom<T extends obj>(to: T, from: Partial<T>): T {
         for (const [k, v] of Object.entries(to)) {
             const fv = from[k];
             if (fv === undefined) {
@@ -41,7 +41,7 @@ export default class ObjectHelper {
             const type = typeof v;
             if (type === "object" && !Array.isArray(fv) && v !== null) {
                 if (fv !== null) {
-                    ObjectHelper.fillFrom(v, fv);
+                    ObjectHelper.fillFrom(v as obj, fv as obj);
                 }
                 continue;
             }

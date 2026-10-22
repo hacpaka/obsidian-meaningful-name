@@ -1,10 +1,13 @@
-export type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends (...args: any[]) => any ? K : never }[keyof T] &
+export type FunctionPropertyNames<T> = {
+    [K in keyof T]: T[K] extends (...args: never[]) => unknown ? K : never;
+}[keyof T] &
     string;
 export type Implementation<Target, Method extends FunctionPropertyNames<Required<Target>>, O> = (
+    this: Target,
     args: O,
-    defaultArgs: Target[Method] extends (...arg: any) => any ? Parameters<Target[Method]> : unknown[],
+    defaultArgs: Target[Method] extends (...arg: never[]) => unknown ? Parameters<Target[Method]> : unknown[],
     vanilla: Target[Method]
-) => any;
+) => unknown;
 export default class FunctionReplacer<Target, Method extends FunctionPropertyNames<Required<Target>>, O> {
     private vanilla: Target[Method] | null = null;
 
@@ -32,6 +35,7 @@ export default class FunctionReplacer<Target, Method extends FunctionPropertyNam
      * so a single drifted API degrades one feature instead of crashing boot.
      */
     public static tryCreate<Target, Method extends FunctionPropertyNames<Required<Target>>, O>(
+        this: void,
         target: Target,
         method: Method,
         args: O,
@@ -54,10 +58,11 @@ export default class FunctionReplacer<Target, Method extends FunctionPropertyNam
             return false;
         }
 
-        const self = this;
-        this.vanilla = this.target[this.method];
-        this.target[this.method] = function (...args: unknown[]): unknown {
-            return self.implementation.call(this, self.args, args, self.vanilla);
+        const { implementation, args } = this;
+        const vanilla = (this.vanilla = this.target[this.method]);
+        // A regular function, so `this` is whatever object the patched method is called on.
+        this.target[this.method] = function (...params: unknown[]): unknown {
+            return implementation.call(this, args, params, vanilla);
         } as unknown as Target[Method];
 
         return true;

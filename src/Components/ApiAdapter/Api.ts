@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { ApiInterface, EventDispatcherInterface, Events, ResolverFactory } from "front-matter-plugin-api-provider";
+import { ApiInterface, EventDispatcherInterface, Events, ResolverFactory } from "./Contracts";
 import FeatureComposer from "../../Feature/FeatureComposer";
 import SI from "../../../config/inversify.types";
 

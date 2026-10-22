@@ -4,28 +4,32 @@ import { injectable } from "inversify";
 
 @injectable()
 export class ExplorerFileItemMutator {
-    constructor(private readonly item: TFileExplorerItem, private readonly resolver: ResolverInterface) {
-        item.updateTitle = this.updateTitle.bind(this);
-        item.startRename = this.startRename.bind(this);
+    constructor(
+        private readonly item: TFileExplorerItem,
+        private readonly resolver: ResolverInterface
+    ) {
+        item.updateTitle = () => this.updateTitle();
+        item.startRename = () => this.startRename();
     }
 
     public destroy() {
-        this.item.updateTitle = this.getProto().updateTitle;
-        this.item.startRename = this.getProto().startRename;
+        // Dropping the own overrides brings back the prototype's methods.
+        delete this.item.updateTitle;
+        delete this.item.startRename;
     }
 
     private getProto(): TFileExplorerItem {
-        return Object.getPrototypeOf(this.item);
+        return Object.getPrototypeOf(this.item) as TFileExplorerItem;
     }
 
-    private updateTitle() {
+    private updateTitle(): void {
         this.getProto().updateTitle.call(this.item);
         const title = this.resolver.resolve(this.item.file.path);
         title?.length > 0 && this.item.innerEl.setText(title);
     }
 
-    private startRename() {
+    private startRename(): void {
         this.item.innerEl.setText(this.item.getTitle());
-        return this.getProto().startRename.call(this.item);
+        this.getProto().startRename.call(this.item);
     }
 }

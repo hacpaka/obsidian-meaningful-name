@@ -54,10 +54,6 @@ const SI = {
     "service:note:link": "",
     "service:fake_title_element": "",
     "service:search:dom:wrapper": "",
-    "settings:feature:builder": "",
-    "settings:builder": "",
-    "factory:settings:feature:builder": "",
-    "factory:settings:builder": "",
     "settings:storage": "",
     "template:pattern": "",
     api: "",
@@ -66,7 +62,6 @@ const SI = {
     "processor:factory": "",
     processor: "",
     "processor:args": "",
-    "processor:argument.transformer": "",
 };
 
 for (const key of Object.keys(SI)) {

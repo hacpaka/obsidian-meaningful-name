@@ -1,14 +1,9 @@
 import { MetadataCache, Modal, TFile } from "obsidian";
-import FeatureBuildInterface from "@src/Settings/Interface/FeatureBuildInterface";
 import FunctionReplacer, { FunctionPropertyNames, Implementation } from "@src/Utils/FunctionReplacer";
-import SettingBuilderInterface from "@src/Settings/Interface/SettingBuilderInterface";
-import { Feature } from "@src/Enum";
 
-export type ObsidianFileFactory<T = any> = (path: string) => T;
-export type ObsidianMetaFactory<T = any> = (path: string, type: "frontmatter" | "headings") => T;
+export type ObsidianFileFactory<T = unknown> = (path: string) => T;
+export type ObsidianMetaFactory<T = unknown> = (path: string, type: "frontmatter" | "headings") => T;
 export type MetadataCacheFactory<T extends MetadataCache> = () => T;
-export type SettingsFeatureBuildFactory = <K extends Feature>(type: string) => FeatureBuildInterface<K> | null;
-export type SettingsBuilderFactory = <T extends object>(type: string) => SettingBuilderInterface<T, keyof T>[];
 export type ObsidianActiveFile = () => TFile | null;
 export type FunctionReplacerFactory<Target, Method extends FunctionPropertyNames<Required<Target>>, O> = (
     target: Target,

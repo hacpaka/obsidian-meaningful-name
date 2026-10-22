@@ -3,7 +3,7 @@ import SI from "@config/inversify.types";
 import LoggerInterface from "@src/Components/Debug/LoggerInterface";
 import { Feature } from "@src/Enum";
 import Alias from "@src/Feature/Alias/Alias";
-import { CachedMetadata, MetadataCacheExt } from "obsidian";
+import { CachedMetadata, FrontMatterCache, MetadataCacheExt } from "obsidian";
 import { MetadataCacheFactory } from "@config/inversify.factory.types";
 import { StrategyFactory, StrategyType, ValidatorFactory, ValidatorType } from "./Types";
 import { StrategyInterface, ValidatorInterface } from "./Interfaces";
@@ -53,7 +53,7 @@ export class AliasFeature extends AbstractFeature<Feature> {
     enable(): void {
         this.ref = this.dispatcher.addListener({
             name: "metadata:cache:changed",
-            cb: e => this.update(e.get().path, e.get().cache),
+            cb: e => void this.update(e.get().path, e.get().cache).catch(console.error),
         });
         this.setValidator(this.config.getValidator());
         this.setStrategy(this.config.getStrategy());
@@ -79,7 +79,7 @@ export class AliasFeature extends AbstractFeature<Feature> {
         this.logger.log(`Set strategy [${type}]. Status: ${this.strategy !== null}`);
     }
 
-    private process(frontmatter: { [k: string]: any }, path: string): boolean {
+    private process(frontmatter: FrontMatterCache, path: string): boolean {
         const alias = new Alias(frontmatter);
         this.strategy.process(alias, path);
         const result = alias.isChanged();

@@ -99,7 +99,7 @@ export default class GraphManager extends AbstractManager {
         const node = this.getFirstNode();
         if (node) {
             this.replacement = this.factory(
-                Object.getPrototypeOf(node),
+                Object.getPrototypeOf(node) as GraphNode,
                 "getDisplayText",
                 this,
                 function (self, defaultArgs, vanilla) {
@@ -121,7 +121,7 @@ export default class GraphManager extends AbstractManager {
     }
 
     private runBackgroundInit(): void {
-        window.setTimeout(async () => {
+        window.setTimeout(() => {
             this.logger.log("init by backgroundInit");
             this.initReplacement();
         }, 200);

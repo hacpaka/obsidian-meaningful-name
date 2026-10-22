@@ -9,12 +9,12 @@ export default class ArrayStrategy implements StrategyInterface {
         private delimiterGetter: () => { enabled: boolean; value: string }
     ) {}
 
-    process(v: any[]): string | null {
+    process(v: (string | number)[]): string | null {
         if (v.length === 0) {
             return null;
         }
         const delimiter = this.delimiterGetter();
-        return !delimiter.enabled ? v[0] : v.join(delimiter.value);
+        return !delimiter.enabled ? (v[0] as string) : v.join(delimiter.value);
     }
 
     support(type: string): boolean {

@@ -9,7 +9,7 @@ export default class LoggerComposer {
 
     public create(name: string): LoggerInterface {
         if (!this.loggers.has(name)) {
-            this.loggers.set(name, new Debugger(name, this.isEnabled.bind(this)));
+            this.loggers.set(name, new Debugger(name, () => this.isEnabled()));
         }
         return this.loggers.get(name);
     }

@@ -5,17 +5,17 @@ import { injectable } from "inversify";
 export default class Debugger implements LoggerInterface {
     constructor(private name: string, private enabled: () => boolean) {}
 
-    info(...value: any[]): void {
+    info(...value: unknown[]): void {
         this.log(...value);
     }
-    debug(...value: any[]): void {
+    debug(...value: unknown[]): void {
         this.log(...value);
     }
-    warn(...value: any[]): void {
+    warn(...value: unknown[]): void {
         this.log(...value);
     }
 
-    log(...value: any) {
+    log(...value: unknown[]) {
         if (this.enabled()) {
             console.debug(`[${this.name}]`, ...value);
         }

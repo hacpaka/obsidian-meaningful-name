@@ -1,7 +1,7 @@
 import { moment } from "obsidian";
 import en from "./en";
 import ru from "./ru";
-import i18next from "i18next";
+import i18next, { TOptions } from "i18next";
 import zh from "./zh";
 import zh_tw from "./zh-tw";
 import ko from "./ko";
@@ -41,7 +41,7 @@ type DotNot<T> = T extends string
 const defaultLocale = "en";
 const locale = moment.locale();
 
-i18next.init({
+void i18next.init({
     lng: locale,
     fallbackLng: defaultLocale,
     resources: {
@@ -77,5 +77,5 @@ i18next.init({
 export type Translation = DeepPartial<typeof en>;
 
 export const t = (path: DotNot<typeof en>, params?: object): string => {
-    return i18next.t(path as string, params as any) as string;
+    return i18next.t(path, params as TOptions);
 };

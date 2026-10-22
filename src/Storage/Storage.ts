@@ -63,7 +63,7 @@ class StorageObjectItem<T extends ObjectItem> implements ObjectItemInterface<T> 
         for (const [k, v] of ObjectHelper.entries(this.items)) {
             data[k] = v.value();
         }
-        return data as T;
+        return data;
     }
 }
 
