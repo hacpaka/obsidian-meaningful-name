@@ -9,6 +9,13 @@ At release time, rename `## Unreleased` to the version being released.
 Meaningful Name starts at 1.0.0. The 4.x and older sections are releases of the original
 [Front Matter Title](https://github.com/snezhig/obsidian-front-matter-title), kept for history.
 
+## 1.0.1
+
+### Fixed
+- The plugin no longer sets inline styles to hide the original title. It uses a CSS class from the new
+  `styles.css`, as the Obsidian plugin review requires. Releases now ship `styles.css` next to `main.js` and
+  `manifest.json`.
+
 ## 1.0.0
 
 ### Changed

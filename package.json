@@ -1,6 +1,6 @@
 {
   "name": "obsidian-meaningful-name",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Shows a readable name from a note's frontmatter in place of its filename.",
   "main": "main.js",
   "scripts": {

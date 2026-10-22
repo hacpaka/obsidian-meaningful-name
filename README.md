@@ -41,7 +41,7 @@ Open **Settings → Community plugins → Browse**, search for **Meaningful Name
 
 ### Manual
 
-Download `main.js` and `manifest.json` from the [latest release](https://github.com/hacpaka/obsidian-meaningful-name/releases/latest) into your vault under `.obsidian/plugins/meaningful-name/`, then enable the plugin in **Settings → Community plugins**.
+Download `main.js`, `manifest.json` and `styles.css` from the [latest release](https://github.com/hacpaka/obsidian-meaningful-name/releases/latest) into your vault under `.obsidian/plugins/meaningful-name/`, then enable the plugin in **Settings → Community plugins**.
 
 ## Quick start
 

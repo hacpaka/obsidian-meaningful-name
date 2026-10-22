@@ -16,7 +16,7 @@ const type = process.argv[2] ?? 'beta';
             throw new Error(`Type must be one of ${Object.keys(manifests).join(',')}, got ${type}`);
         }
 
-        const files = new Set(['main.js', manifests.release, manifests[type]]);
+        const files = new Set(['main.js', 'styles.css', manifests.release, manifests[type]]);
 
         await new Promise(r => exec('npm run build', r));
 

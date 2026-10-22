@@ -105,8 +105,8 @@ const highlight = (container: string, itemSel: string, text: string) =>
                 zIndex: "9999",
                 boxSizing: "border-box",
             } as CSSStyleDeclaration);
-            if (getComputedStyle(c).position === "static") c.style.position = "relative";
-            c.style.overflow = "hidden";
+            if (getComputedStyle(c).position === "static") c.setCssStyles({ position: "relative" });
+            c.setCssStyles({ overflow: "hidden" });
             c.appendChild(ring);
         },
         container,

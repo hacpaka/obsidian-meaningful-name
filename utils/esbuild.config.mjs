@@ -49,6 +49,7 @@ const copyManifestPlugin = {
 		build.onEnd(() => {
 			fs.mkdirSync("dist", { recursive: true });
 			fs.copyFileSync("manifest.json", "dist/manifest.json");
+			fs.copyFileSync("styles.css", "dist/styles.css");
 		});
 	},
 };

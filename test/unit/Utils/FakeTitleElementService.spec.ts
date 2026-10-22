@@ -13,13 +13,14 @@ class StubElement {
     public readonly children: StubElement[] = [];
     public readonly listeners: [string, unknown][] = [];
     private readonly attributes = new Map<string, string>();
-    private readonly properties = new Map<string, string>();
+    private readonly classes = new Set<string>();
 
-    public style = {
-        setProperty: (name: string, value: string, priority?: string) =>
-            this.properties.set(name, priority ? `${value} !${priority}` : value),
-        removeProperty: (name: string) => this.properties.delete(name),
-    };
+    addClass(name: string): void {
+        this.classes.add(name);
+    }
+    removeClass(name: string): void {
+        this.classes.delete(name);
+    }
 
     setText(text: string): void {
         this.textContent = text;
@@ -59,7 +60,7 @@ class StubElement {
         return true;
     }
     isHidden(): boolean {
-        return this.properties.get("display") === "none !important";
+        return this.classes.has("omn-hidden");
     }
 }
 

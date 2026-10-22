@@ -108,18 +108,18 @@ export default class FakeTitleElementService {
         return this;
     }
 
-    // Hide via an inline `display:none !important` instead of the `hidden`
+    // Hide via the `omn-hidden` class (styles.css) instead of the `hidden`
     // attribute. The UA rule `[hidden]{display:none}` has the lowest priority,
     // so any theme/snippet with a `.inline-title{display:…}` rule un-hides the
     // original title and the filename shows alongside our title (#280, #234,
-    // #123). An important inline declaration wins the cascade against any
-    // author selector, keeping exactly one title visible.
+    // #123). The class rule is `!important` and more specific than such theme
+    // rules, keeping exactly one title visible.
     private hide(el: HTMLElement): void {
-        el.style.setProperty("display", "none", "important");
+        el.addClass("omn-hidden");
     }
 
     private show(el: HTMLElement): void {
-        el.style.removeProperty("display");
+        el.removeClass("omn-hidden");
     }
 
     private extractId(e: any): string | null {
